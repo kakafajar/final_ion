@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Home Screen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Profile & Notification -->
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; align-items: center;">
+      <ion-avatar>
+        <img src="assets/avatar.jpg" />
+      </ion-avatar>
+      <div style="margin-left: 10px;">{{ username }}</div>
+    </div>
+    <ion-icon name="notifications-outline" size="large"></ion-icon>
+  </div>
+
+
+  
+  
+  
+
+  <!-- Menu Buttons -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" fill="outline">
+          <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+          DINE IN
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" fill="outline">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          RESERVATION
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Popular Items -->
+  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    <h2>Popular Items</h2>
+    <a href="#">View All</a>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card>
+          <img src="assets/burger.jpg" />
+          <ion-card-header>
+            <ion-card-title>BURGER</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>30 min | 200 sell</ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card>
+          <img src="assets/pizza.jpg" />
+          <ion-card-header>
+            <ion-card-title>PIZZA</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>30 min | 200 sell</ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="order">
+      <ion-icon name="fast-food-outline"></ion-icon>
+      <ion-label>Order</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="inbox">
+      <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+      <ion-label>Inbox</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="profile">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

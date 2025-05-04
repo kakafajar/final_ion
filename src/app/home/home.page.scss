@@ -1,3 +1,7 @@
+ion-content {
+  --background: #F5F5F5; /* White Smoke */
+}
+
 .top-bar {
   display: flex;
   align-items: center;
@@ -8,11 +12,12 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  
 }
 
 .username {
   flex: 1;
-  margin-left: 10px;
+  margin-left: 16px;
   font-weight: bold;
   font-size: 18px;
 }
@@ -20,6 +25,9 @@
 .notif-icon {
   font-size: 24px;
 }
+
+
+
 
 .search-bar {
   margin: 20px 0;
@@ -38,6 +46,22 @@
   align-items: center;
 }
 
+.custom-button {
+  --background: #8B4513;
+  --color: white;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  height: 48px;
+  font-size: 13px;
+}
+
+.custom-icon {
+  font-size: 16px;
+}
+
+
 .banner-slider img {
   width: 100%;
   height: 200px;
@@ -54,6 +78,7 @@
 .popular-items {
   display: flex;
   gap: 10px;
+  color: #8B4513;
 }
 
 .item-card img {
@@ -61,5 +86,37 @@
   height: 100px;
   object-fit: cover;
 }
+
+.menu-card {
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fffaf3; /* krem hangat */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.menu-text {
+  padding: 6px 10px; /* kecil saja */
+}
+
+.menu-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  color: #4E342E;
+}
+
+.menu-info {
+  font-size: 12px;
+  margin: 2px 0 0 0;
+  color: #666;
+}
+
+
 
 

@@ -1,20 +1,14 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Home Screen</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="ion-padding">
 
   <!-- Profile & Notification -->
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <div style="display: flex; align-items: center;">
       <ion-avatar>
-        <img src="assets/avatar.jpg" />
+        <img src="assets/gambar/foto1.jpg" />
       </ion-avatar>
-      <div style="margin-left: 10px;">{{ username }}</div>
+      <div style="margin-left: 20px; padding-right: 10px;" style="color: #8B4513;">{{ username }}</div>
     </div>
-    <ion-icon name="notifications-outline" size="large"></ion-icon>
+    <ion-icon name="notifications-outline" size="large" style="color: #8B4513;"></ion-icon>
   </div>
 
 
@@ -24,46 +18,59 @@
 
   <!-- Menu Buttons -->
   <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" fill="outline">
-          <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="4">
+        <ion-button expand="block" class="custom-button">
+          <ion-icon name="restaurant-outline" slot="start" class="custom-icon"></ion-icon>
           DINE IN
         </ion-button>
       </ion-col>
-      <ion-col>
-        <ion-button expand="block" fill="outline">
-          <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          RESERVATION
+      <ion-col size="4">
+        <ion-button expand="block" class="custom-button">
+          <ion-icon name="bag-outline" slot="start" class="custom-icon"></ion-icon>
+          TAKE AWAY
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" class="custom-button">
+          <ion-icon name="calendar-outline" slot="start" class="custom-icon"></ion-icon>
+          RESERVE
         </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
+  
+  
 
   <!-- Popular Items -->
   <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <h2>Popular Items</h2>
-    <a href="#">View All</a>
+    <h2 style="color: #8B4513;">Popular Items</h2>
+    <a href="#" style="color: #CD853F; text-decoration: none;">View All</a>
   </div>
 
   <ion-grid>
     <ion-row>
-      <ion-col size="6">
-        <ion-card>
-          <img src="assets/burger.jpg" />
-          <ion-card-header>
-            <ion-card-title>BURGER</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>30 min | 200 sell</ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col size="6">
-        <ion-card>
-          <img src="assets/pizza.jpg" />
-          <ion-card-header>
-            <ion-card-title>PIZZA</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>30 min | 200 sell</ion-card-content>
+      <ion-col *ngFor="let item of items" size="6" size-md="4" size-lg="2">
+        <ion-card class="menu-card">
+          <img [src]="item.img" class="menu-img" />
+          <div class="menu-text" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
+              <div *ngIf="item.count > 0" style="display: flex; align-items: center; gap: 4px;">
+                <ion-button size="small" fill="clear" (click)="decrement(item.id)" style="--padding-start: 2px; --padding-end: 2px;">
+                  <ion-icon name="remove" style="font-size: 16px;"></ion-icon>
+                </ion-button>
+                <span style="font-size: 14px;">{{ item.count }}</span>
+                <ion-button size="small" fill="clear" (click)="increment(item.id)" style="--padding-start: 2px; --padding-end: 2px;">
+                  <ion-icon name="add" style="font-size: 16px;"></ion-icon>
+                </ion-button>
+              </div>
+              <ion-button *ngIf="item.count === 0" fill="solid" size="small" color="dark" (click)="increment(item.id)" style="padding: 0;">
+                <ion-icon name="add" style="font-size: 18px;"></ion-icon>
+              </ion-button>
+            </div>
+            <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.time }} | {{ item.sold }} sell</p>
+          </div>
         </ion-card>
       </ion-col>
     </ion-row>

@@ -22,7 +22,11 @@ const routes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
+  },  {
+    path: 'dine-in',
+    loadChildren: () => import('./dine-in/dine-in.module').then( m => m.DineInPageModule)
   },
+
 ];
 
 @NgModule({

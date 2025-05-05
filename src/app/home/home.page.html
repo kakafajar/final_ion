@@ -10,9 +10,7 @@
     </div>
     <ion-icon name="notifications-outline" size="large" style="color: #8B4513;"></ion-icon>
   </div>
-
-
-  
+ 
   
   
 
@@ -20,10 +18,10 @@
   <ion-grid>
     <ion-row class="ion-align-items-center">
       <ion-col size="4">
-        <ion-button expand="block" class="custom-button">
+        <ion-button expand="block" class="custom-button" [routerLink]="['/dine-in']">
           <ion-icon name="restaurant-outline" slot="start" class="custom-icon"></ion-icon>
           DINE IN
-        </ion-button>
+        </ion-button>        
       </ion-col>
       <ion-col size="4">
         <ion-button expand="block" class="custom-button">
@@ -56,6 +54,7 @@
           <div class="menu-text" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
+  
               <div *ngIf="item.count > 0" style="display: flex; align-items: center; gap: 4px;">
                 <ion-button size="small" fill="clear" (click)="decrement(item.id)" style="--padding-start: 2px; --padding-end: 2px;">
                   <ion-icon name="remove" style="font-size: 16px;"></ion-icon>
@@ -65,16 +64,19 @@
                   <ion-icon name="add" style="font-size: 16px;"></ion-icon>
                 </ion-button>
               </div>
-              <ion-button *ngIf="item.count === 0" fill="solid" size="small" color="dark" (click)="increment(item.id)" style="padding: 0;">
+  
+              <ion-button *ngIf="item.count === 0" fill="solid" size="small" color="dark" (click)="presentOrderType(item)" style="padding: 0;">
                 <ion-icon name="add" style="font-size: 18px;"></ion-icon>
               </ion-button>
             </div>
+  
             <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.time }} | {{ item.sold }} sell</p>
           </div>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
+  
 
 </ion-content>
 

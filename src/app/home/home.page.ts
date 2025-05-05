@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   standalone:false,
@@ -33,4 +35,36 @@ export class HomePage {
     const item = this.items.find(i => i.id === id);
     if (item && item.count > 0) item.count--;
   }
+
+  constructor(private alertController: AlertController) {}
+
+async presentOrderType(item: any) {
+  const alert = await this.alertController.create({
+    header: 'Select Order Type',
+    message: `Choose order type for ${item.name}:`,
+    buttons: [
+      {
+        text: 'Dine In',
+        handler: () => {
+          console.log(`Dine In selected for ${item}`);
+          // Tambahkan logika selanjutnya di sini
+        }
+      },
+      {
+        text: 'Take Away',
+        handler: () => {
+          console.log(`Take Away selected for ${item}`);
+        }
+      },
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      }
+    ]
+  });
+
+  await alert.present();
+}
+
+
 }

@@ -1,0 +1,42 @@
+
+<ion-content class="ion-padding">
+
+  <!-- Search Bar -->
+  <ion-searchbar placeholder="Search your food" animated></ion-searchbar>
+
+  <!-- Dine In Section -->
+  <ion-card>
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="restaurant" size="large"></ion-icon>
+      <h2>DINE IN</h2>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Menu Tabs -->
+  <ion-segment value="special">
+    <ion-segment-button value="special">SPECIAL</ion-segment-button>
+    <ion-segment-button value="combo">COMBO</ion-segment-button>
+    <ion-segment-button value="nasi">NASI GORENG</ion-segment-button>
+    <ion-segment-button value="mie">MIE</ion-segment-button>
+  </ion-segment>
+
+  <!-- Special Section -->
+  <ion-text color="dark">
+    <h2 style="margin-top: 16px;">SPECIAL</h2>
+  </ion-text>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let item of specialItems">
+        <ion-card>
+          <ion-img [src]="item.img"></ion-img>
+          <ion-card-content>
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

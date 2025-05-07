@@ -38,7 +38,7 @@ ion-toolbar {
   
   /* Tabs (ion-segment) */
   ion-segment {
-    --background: #f0f0f0;
+    --background:#f0f0f0;
     margin-top: 16px;
     border-radius: 8px;
     padding: 4px;
@@ -48,7 +48,7 @@ ion-toolbar {
     --color: #7B3F00; /* Warna teks default */
     --background: #ffffff; /* Background default */
     --color-checked: #000000; /* Teks saat dipilih */
-    --background-checked: #7B3F00; /* Background saat dipilih */
+    --background-checked: #ffce99; /* Background saat dipilih */
     font-weight: 500;
     border-radius: 10px;
     padding: 6px;

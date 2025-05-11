@@ -1,4 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild  } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { FoodDetailComponent } from '../food-detail/food-detail.component';
+
+
+
 
 @Component({
   standalone: false,
@@ -7,19 +12,70 @@ import { Component, OnInit, ElementRef, ViewChild  } from '@angular/core';
   styleUrls: ['./dine-in.page.scss']
 })
 export class DineInPage implements OnInit {
-  constructor() {}
+  constructor(private modalController: ModalController) {}
 
   selectedCategory: string = 'special'; // default selected
   totalCount = 0;
 
-  items = [
-    { id: 1, name: 'Special Beef', img: 'assets/makanan/burger.jpg', count: 0, time: '10 min', sold: 15, category: 'special' },
-    { id: 2, name: 'Combo Spesial', img: 'assets/makanan/pizza.jpg', count: 0, time: '15 min', sold: 30, category: 'combo' },
-    { id: 3, name: 'Nasi Goreng', img: 'assets/makanan/nasigoreng.jpg', count: 0, time: '12 min', sold: 20, category: 'nasi' },
-    { id: 4, name: 'Mie Ayam', img: 'assets/makanan/mieayam.jpg', count: 0, time: '8 min', sold: 25, category: 'mie' },
-    { id: 5, name: 'Mie Goreng', img: 'assets/makanan/miegoreng.jpg', count: 0, time: '9 min', sold: 10, category: 'mie' }
-    // Tambahkan lebih banyak item sesuai kebutuhan
-  ];
+ items = [
+  {
+    id: 1,
+    name: 'burger',
+    category: 'special',
+    price: 25000,
+    image: 'assets/makanan/burger.jpg',
+    description: 'chees burger.',
+    count: 0
+  },
+  {
+    id: 2,
+    name: 'Mie Ayam',
+    category: 'special',
+    price: 20000,
+    image: 'assets/img/mieayam.jpg',
+    description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+    count: 0
+  },
+  {
+    id: 3,
+    name: 'burger',
+    category: 'special',
+    price: 25000,
+    image: 'assets/makanan/burger.jpg',
+    description: 'chees burger.',
+    count: 0
+  },
+  {
+    id: 4,
+    name: 'Mie Ayam',
+    category: 'special',
+    price: 20000,
+    image: 'assets/img/mieayam.jpg',
+    description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+    count: 0
+  },
+  {
+    id: 5,
+    name: 'burger',
+    category: 'special',
+    price: 25000,
+    image: 'assets/makanan/burger.jpg',
+    description: 'chees burger.',
+    count: 0
+  },
+  {
+    id: 6,
+    name: 'Mie Ayam',
+    category: 'special',
+    price: 20000,
+    image: 'assets/img/mieayam.jpg',
+    description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+    count: 0
+  },
+  // Tambah item lainnya dengan id unik dan count: 0
+];
+
+  
 
   filteredItems: any[] = [];
 
@@ -68,4 +124,18 @@ export class DineInPage implements OnInit {
   goToCheckout() {
     console.log("Go to checkout with", this.totalCount, "items");
   }
+
+async openFoodDetail(item: any) {
+  const modal = await this.modalController.create({
+    component: FoodDetailComponent,
+    componentProps: { food: item },
+    breakpoints: [0, 0.5, 0.9],
+    initialBreakpoint: 0.9,
+    showBackdrop: true,
+  });
+  return await modal.present();
+}
+
+
+
 }

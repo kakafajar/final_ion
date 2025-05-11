@@ -1,0 +1,45 @@
+<ion-content class="ion-padding">
+  <!-- Close button -->
+  <ion-toolbar>
+    <ion-title>Menu Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="dismiss()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <div class="detail-container">
+    <!-- Food image -->
+    <img [src]="food.image" alt="{{ food.name }}" class="food-image" />
+
+    <!-- Food info -->
+    <div class="food-info">
+      <h2>{{ food.name }}</h2>
+      <p>{{ food.description }}</p>
+    </div>
+
+    <!-- Quantity & price -->
+    <div class="quantity-price">
+      <ion-button fill="clear" (click)="decrement()">
+        <ion-icon name="remove-outline"></ion-icon>
+      </ion-button>
+
+      <span class="quantity">{{ food.count }}</span>
+
+      <ion-button fill="clear" (click)="increment()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+
+      <span class="price">Rp{{ food.price * food.count }}</span>
+    </div>
+  </div>
+
+  <!-- Checkout button -->
+<ion-footer class="ion-padding" style="background-color: white;">
+  <ion-button expand="block" color="light" (click)="checkout()" style="color: #f0d8b1;">
+    Checkout - Rp{{ food.price * food.count }}
+  </ion-button>
+</ion-footer>
+
+</ion-content>

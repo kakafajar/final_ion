@@ -26,34 +26,50 @@
 <ion-text color="dark">
   <h2 id="special">SPECIAL</h2>
 </ion-text>
+
 <ion-grid>
   <ion-row>
-    <ion-col *ngFor="let item of items" [hidden]="item.category !== 'special'" size="6" size-md="4" size-lg="3">
-      <ion-card>
-        <img [src]="item.img" alt="{{ item.name }}" />
+    <ion-col
+      *ngFor="let item of items"
+      [hidden]="item.category !== 'special'"
+      size="6"
+      size-md="4"
+      size-lg="3"
+    >
+      <ion-card (click)="openFoodDetail(item)">
+        <img [src]="item.image" alt="{{ item.name }}" />
+        <ion-card-header>
+          <ion-card-title>{{ item.name }}</ion-card-title>
+          <ion-card-subtitle>Rp {{ item.price | number }}</ion-card-subtitle>
+        </ion-card-header>
         <ion-card-content>
-          <ion-text color="dark">
-            <h3>{{ item.name }}</h3>
-          </ion-text>
-          <ion-text color="medium">
-            <p>{{ item.time }} | {{ item.sold }} sold</p>
-          </ion-text>
-          <ion-row class="ion-align-items-center ion-justify-content-between">
-            <ion-col size="auto">
-              <ion-button size="small" color="light" (click)="item.count > 0 ? item.count-- : 0">
-                <ion-icon name="remove-outline"></ion-icon>
-              </ion-button>
-              <span class="ion-padding-horizontal">{{ item.count }}</span>
-              <ion-button size="small" color="light" (click)="item.count++">
-                <ion-icon name="add-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
+          <p>{{ item.description }}</p>
+          <div class="counter" (click)="$event.stopPropagation()">
+            <ion-button
+              size="small"
+              color="danger"
+              fill="outline"
+              (click)="decrement(item.id)"
+              [disabled]="item.count === 0"
+            >
+              -
+            </ion-button>
+            <span style="margin: 0 8px;">{{ item.count || 0 }}</span>
+            <ion-button
+              size="small"
+              color="primary"
+              fill="outline"
+              (click)="increment(item.id)"
+            >
+              +
+            </ion-button>
+          </div>
         </ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
 </ion-grid>
+
 
 <!-- COMBO -->
 <ion-text color="dark">
@@ -62,28 +78,7 @@
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let item of items" [hidden]="item.category !== 'combo'" size="6" size-md="4" size-lg="3">
-      <ion-card>
-        <img [src]="item.img" alt="{{ item.name }}" />
-        <ion-card-content>
-          <ion-text color="dark">
-            <h3>{{ item.name }}</h3>
-          </ion-text>
-          <ion-text color="medium">
-            <p>{{ item.time }} | {{ item.sold }} sold</p>
-          </ion-text>
-          <ion-row class="ion-align-items-center ion-justify-content-between">
-            <ion-col size="auto">
-              <ion-button size="small" color="light" (click)="item.count > 0 ? item.count-- : 0">
-                <ion-icon name="remove-outline"></ion-icon>
-              </ion-button>
-              <span class="ion-padding-horizontal">{{ item.count }}</span>
-              <ion-button size="small" color="light" (click)="item.count++">
-                <ion-icon name="add-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
+      
     </ion-col>
   </ion-row>
 </ion-grid>
@@ -95,28 +90,7 @@
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let item of items" [hidden]="item.category !== 'nasi'" size="6" size-md="4" size-lg="3">
-      <ion-card>
-        <img [src]="item.img" alt="{{ item.name }}" />
-        <ion-card-content>
-          <ion-text color="dark">
-            <h3>{{ item.name }}</h3>
-          </ion-text>
-          <ion-text color="medium">
-            <p>{{ item.time }} | {{ item.sold }} sold</p>
-          </ion-text>
-          <ion-row class="ion-align-items-center ion-justify-content-between">
-            <ion-col size="auto">
-              <ion-button size="small" color="light" (click)="item.count > 0 ? item.count-- : 0">
-                <ion-icon name="remove-outline"></ion-icon>
-              </ion-button>
-              <span class="ion-padding-horizontal">{{ item.count }}</span>
-              <ion-button size="small" color="light" (click)="item.count++">
-                <ion-icon name="add-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
+      
     </ion-col>
   </ion-row>
 </ion-grid>
@@ -128,28 +102,7 @@
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let item of items" [hidden]="item.category !== 'mie'" size="6" size-md="4" size-lg="3">
-      <ion-card>
-        <img [src]="item.img" alt="{{ item.name }}" />
-        <ion-card-content>
-          <ion-text color="dark">
-            <h3>{{ item.name }}</h3>
-          </ion-text>
-          <ion-text color="medium">
-            <p>{{ item.time }} | {{ item.sold }} sold</p>
-          </ion-text>
-          <ion-row class="ion-align-items-center ion-justify-content-between">
-            <ion-col size="auto">
-              <ion-button size="small" color="light" (click)="item.count > 0 ? item.count-- : 0">
-                <ion-icon name="remove-outline"></ion-icon>
-              </ion-button>
-              <span class="ion-padding-horizontal">{{ item.count }}</span>
-              <ion-button size="small" color="light" (click)="item.count++">
-                <ion-icon name="add-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
+      
     </ion-col>
   </ion-row>
 </ion-grid>

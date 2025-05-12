@@ -66,3 +66,9 @@
   color: #a94438;
   cursor: pointer;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+}

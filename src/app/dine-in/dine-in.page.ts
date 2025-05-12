@@ -1,9 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
-
-
-
+import { CartService } from '../cart.service';
 
 @Component({
   standalone: false,
@@ -12,75 +10,89 @@ import { FoodDetailComponent } from '../food-detail/food-detail.component';
   styleUrls: ['./dine-in.page.scss']
 })
 export class DineInPage implements OnInit {
-  constructor(private modalController: ModalController) {}
-
-  selectedCategory: string = 'special'; // default selected
+  selectedCategory: string = 'special';
   totalCount = 0;
 
- items = [
-  {
-    id: 1,
-    name: 'burger',
-    category: 'special',
-    price: 25000,
-    image: 'assets/makanan/burger.jpg',
-    description: 'chees burger.',
-    count: 0
-  },
-  {
-    id: 2,
-    name: 'Mie Ayam',
-    category: 'special',
-    price: 20000,
-    image: 'assets/img/mieayam.jpg',
-    description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-    count: 0
-  },
-  {
-    id: 3,
-    name: 'burger',
-    category: 'special',
-    price: 25000,
-    image: 'assets/makanan/burger.jpg',
-    description: 'chees burger.',
-    count: 0
-  },
-  {
-    id: 4,
-    name: 'Mie Ayam',
-    category: 'special',
-    price: 20000,
-    image: 'assets/img/mieayam.jpg',
-    description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-    count: 0
-  },
-  {
-    id: 5,
-    name: 'burger',
-    category: 'special',
-    price: 25000,
-    image: 'assets/makanan/burger.jpg',
-    description: 'chees burger.',
-    count: 0
-  },
-  {
-    id: 6,
-    name: 'Mie Ayam',
-    category: 'special',
-    price: 20000,
-    image: 'assets/img/mieayam.jpg',
-    description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-    count: 0
-  },
-  // Tambah item lainnya dengan id unik dan count: 0
-];
+  cartItems: any[] = [];        // ✅ Diperbaiki
+  orderType: string = '';       // ✅ Diperbaiki
 
-  
+  items = [
+    {
+      id: 1,
+      name: 'burger',
+      category: 'special',
+      price: 25000,
+      image: 'assets/makanan/burger.jpg',
+      description: 'chees burger.',
+      count: 0
+    },
+    {
+      id: 2,
+      name: 'Mie Ayam',
+      category: 'special',
+      price: 20000,
+      image: 'assets/img/mieayam.jpg',
+      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+      count: 0
+    },
+    {
+      id: 2,
+      name: 'Mie Ayam',
+      category: 'special',
+      price: 20000,
+      image: 'assets/img/mieayam.jpg',
+      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+      count: 0
+    },
+    {
+      id: 2,
+      name: 'Mie Ayam',
+      category: 'mie',
+      price: 20000,
+      image: 'assets/img/mieayam.jpg',
+      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+      count: 0
+    },
+    {
+      id: 2,
+      name: 'Mie Ayam',
+      category: 'combo',
+      price: 20000,
+      image: 'assets/img/mieayam.jpg',
+      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+      count: 0
+    },
+    {
+      id: 2,
+      name: 'Mie Ayam',
+      category: 'combo',
+      price: 20000,
+      image: 'assets/img/mieayam.jpg',
+      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
+      count: 0
+    },
+    
+    // Tambah item lainnya sesuai kebutuhan
+  ];
 
   filteredItems: any[] = [];
 
+  constructor(
+    private modalController: ModalController,
+    private cartService: CartService
+  ) {}
+
   ngOnInit() {
     this.filterItemsByCategory();
+    this.cartItems = this.cartService.getCartItems(); // ✅ Ambil item dari cart
+    this.orderType = this.cartService.getOrderType(); // ✅ Tampilkan jenis pesanan (DINE IN, dsb)
+  }
+
+  filterItems(event: any) {
+    const searchTerm = event.target.value?.toLowerCase() || '';
+    this.filteredItems = this.items.filter(item =>
+      item.name.toLowerCase().includes(searchTerm)
+    );
   }
 
   onCategoryChange(event: any) {
@@ -90,8 +102,7 @@ export class DineInPage implements OnInit {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-  
-  
+
   filterItemsByCategory() {
     this.filteredItems = this.items.filter(item => item.category === this.selectedCategory);
   }
@@ -123,19 +134,17 @@ export class DineInPage implements OnInit {
 
   goToCheckout() {
     console.log("Go to checkout with", this.totalCount, "items");
+    // tambahkan navigasi ke halaman checkout jika sudah tersedia
   }
 
-async openFoodDetail(item: any) {
-  const modal = await this.modalController.create({
-    component: FoodDetailComponent,
-    componentProps: { food: item },
-    breakpoints: [0, 0.5, 0.9],
-    initialBreakpoint: 0.9,
-    showBackdrop: true,
-  });
-  return await modal.present();
-}
-
-
-
+  async openFoodDetail(item: any) {
+    const modal = await this.modalController.create({
+      component: FoodDetailComponent,
+      componentProps: { food: item },
+      breakpoints: [0, 0.5, 0.9],
+      initialBreakpoint: 0.9,
+      showBackdrop: true,
+    });
+    return await modal.present();
+  }
 }

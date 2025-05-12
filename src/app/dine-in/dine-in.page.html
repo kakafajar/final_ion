@@ -2,8 +2,11 @@
 <ion-content class="ion-padding">
 
   <!-- Search Bar -->
-  <ion-searchbar placeholder="Search your food" animated></ion-searchbar>
-
+    <ion-searchbar 
+      placeholder="Search your food" 
+      animated 
+      (ionInput)="filterItems($event)">
+    </ion-searchbar>
   <!-- Dine In Section -->
   <ion-card>
     <ion-card-content class="ion-text-center">
@@ -30,7 +33,7 @@
 <ion-grid>
   <ion-row>
     <ion-col
-      *ngFor="let item of items"
+      *ngFor="let item of filteredItems"
       [hidden]="item.category !== 'special'"
       size="6"
       size-md="4"
@@ -78,7 +81,36 @@
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let item of items" [hidden]="item.category !== 'combo'" size="6" size-md="4" size-lg="3">
-      
+      <ion-card (click)="openFoodDetail(item)">
+        <img [src]="item.image" alt="{{ item.name }}" />
+        <ion-card-header>
+          <ion-card-title>{{ item.name }}</ion-card-title>
+          <ion-card-subtitle>Rp {{ item.price | number }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ item.description }}</p>
+          <div class="counter" (click)="$event.stopPropagation()">
+            <ion-button
+              size="small"
+              color="danger"
+              fill="outline"
+              (click)="decrement(item.id)"
+              [disabled]="item.count === 0"
+            >
+              -
+            </ion-button>
+            <span style="margin: 0 8px;">{{ item.count || 0 }}</span>
+            <ion-button
+              size="small"
+              color="primary"
+              fill="outline"
+              (click)="increment(item.id)"
+            >
+              +
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
     </ion-col>
   </ion-row>
 </ion-grid>
@@ -102,7 +134,36 @@
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let item of items" [hidden]="item.category !== 'mie'" size="6" size-md="4" size-lg="3">
-      
+      <ion-card (click)="openFoodDetail(item)">
+        <img [src]="item.image" alt="{{ item.name }}" />
+        <ion-card-header>
+          <ion-card-title>{{ item.name }}</ion-card-title>
+          <ion-card-subtitle>Rp {{ item.price | number }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ item.description }}</p>
+          <div class="counter" (click)="$event.stopPropagation()">
+            <ion-button
+              size="small"
+              color="danger"
+              fill="outline"
+              (click)="decrement(item.id)"
+              [disabled]="item.count === 0"
+            >
+              -
+            </ion-button>
+            <span style="margin: 0 8px;">{{ item.count || 0 }}</span>
+            <ion-button
+              size="small"
+              color="primary"
+              fill="outline"
+              (click)="increment(item.id)"
+            >
+              +
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
     </ion-col>
   </ion-row>
 </ion-grid>

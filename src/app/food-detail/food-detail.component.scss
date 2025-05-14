@@ -1,3 +1,7 @@
+ion-content {
+  --background: #757575; /* White Smoke */
+}
+
 .detail-container {
   display: flex;
   flex-direction: column;
@@ -6,9 +10,9 @@
 }
 
 .food-image {
-  width: 200px;
+  width: 250px;
   height: 200px;
-  border-radius: 100%;
+  border-radius: 10%;
   object-fit: cover;
   margin: 1rem 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,4 +39,8 @@
   margin-left: auto;
   font-size: 18px;
   font-weight: bold;
+}
+.half-modal {
+  --height: auto;
+  --border-radius: 16px 16px 0 0;
 }

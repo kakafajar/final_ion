@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
 import { CartService } from '../cart.service';
-
+import { MENU_ITEMS } from  'src/app/data/menu';
 @Component({
   standalone: false,
   selector: 'app-dine-in',
@@ -10,70 +10,14 @@ import { CartService } from '../cart.service';
   styleUrls: ['./dine-in.page.scss']
 })
 export class DineInPage implements OnInit {
-  selectedCategory: string = 'special';
+  selectedCategory: string = '';
   totalCount = 0;
 
   cartItems: any[] = [];        // ✅ Diperbaiki
   orderType: string = '';       // ✅ Diperbaiki
 
-  items = [
-    {
-      id: 1,
-      name: 'burger',
-      category: 'special',
-      price: 25000,
-      image: 'assets/makanan/burger.jpg',
-      description: 'chees burger.',
-      count: 0
-    },
-    {
-      id: 2,
-      name: 'Mie Ayam',
-      category: 'special',
-      price: 20000,
-      image: 'assets/img/mieayam.jpg',
-      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-      count: 0
-    },
-    {
-      id: 2,
-      name: 'Mie Ayam',
-      category: 'special',
-      price: 20000,
-      image: 'assets/img/mieayam.jpg',
-      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-      count: 0
-    },
-    {
-      id: 2,
-      name: 'Mie Ayam',
-      category: 'mie',
-      price: 20000,
-      image: 'assets/img/mieayam.jpg',
-      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-      count: 0
-    },
-    {
-      id: 2,
-      name: 'Mie Ayam',
-      category: 'combo',
-      price: 20000,
-      image: 'assets/img/mieayam.jpg',
-      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-      count: 0
-    },
-    {
-      id: 2,
-      name: 'Mie Ayam',
-      category: 'combo',
-      price: 20000,
-      image: 'assets/img/mieayam.jpg',
-      description: 'Mie ayam dengan kuah kaldu gurih dan topping ayam manis.',
-      count: 0
-    },
-    
-    // Tambah item lainnya sesuai kebutuhan
-  ];
+  items = MENU_ITEMS;  //ini bisa
+    // items = [...MENU_ITEMS];   //ini juga bisa
 
   filteredItems: any[] = [];
 
@@ -86,6 +30,8 @@ export class DineInPage implements OnInit {
     this.filterItemsByCategory();
     this.cartItems = this.cartService.getCartItems(); // ✅ Ambil item dari cart
     this.orderType = this.cartService.getOrderType(); // ✅ Tampilkan jenis pesanan (DINE IN, dsb)
+    // this.items = MENU_ITEMS;
+    this.filteredItems = this.items; //ada ini buat manggil itemsnya
   }
 
   filterItems(event: any) {

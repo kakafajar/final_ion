@@ -26,6 +26,10 @@ const routes: Routes = [
     path: 'dine-in',
     loadChildren: () => import('./dine-in/dine-in.module').then( m => m.DineInPageModule)
   },
+  {
+    path: 'take-away',
+    loadChildren: () => import('./take-away/take-away.module').then( m => m.TakeAwayPageModule)
+  },
 
 ];
 

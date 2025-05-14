@@ -39,7 +39,7 @@
       size-md="4"
       size-lg="2"
     >
-      <ion-card  class="menu-card">
+      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
         <img [src]="item.image" class="menu-img" />
 
         <div class="menu-text">
@@ -59,7 +59,7 @@
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)" (click)="openFoodDetail(item)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>
@@ -87,7 +87,7 @@
       size-md="4"
       size-lg="2"
     >
-      <ion-card  class="menu-card">
+      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
         <img [src]="item.image" class="menu-img" />
 
         <div class="menu-text">
@@ -107,7 +107,7 @@
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)" (click)="openFoodDetail(item)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>
@@ -134,7 +134,7 @@
       size-md="4"
       size-lg="2"
     >
-      <ion-card  class="menu-card">
+      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
         <img [src]="item.image" class="menu-img" />
 
         <div class="menu-text">
@@ -154,7 +154,7 @@
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)" (click)="openFoodDetail(item)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>

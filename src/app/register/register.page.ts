@@ -35,7 +35,14 @@ export class RegisterPage {
     });
     toast.present();
 
-    if (success) {
+  if (success) {
+      // Simpan data username dan email ke localStorage
+      localStorage.setItem('userData', JSON.stringify({
+        username: this.username,
+        email: this.email
+      }));
+
+      // Navigasi ke login atau langsung ke profil sesuai kebutuhan
       this.navCtrl.navigateForward('/login');
     }
   }

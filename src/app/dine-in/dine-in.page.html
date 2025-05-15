@@ -45,7 +45,8 @@
         <div class="menu-text">
           <div class="menu-header">
             <p class="menu-title">{{ item.name }}</p>
-
+            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
+            
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
               <ion-button size="small" fill="clear" (click)="decrement(item.id)">
@@ -93,7 +94,8 @@
         <div class="menu-text">
           <div class="menu-header">
             <p class="menu-title">{{ item.name }}</p>
-
+            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
+            
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
               <ion-button size="small" fill="clear" (click)="decrement(item.id)">
@@ -139,7 +141,9 @@
 
         <div class="menu-text">
           <div class="menu-header">
-            <p class="menu-title">{{ item.name }}</p>
+             <p class="menu-title">{{ item.name }}</p>
+            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
+            
 
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
@@ -183,12 +187,14 @@
       size-md="4"
       size-lg="2"
     >
-      <ion-card  class="menu-card">
+      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
         <img [src]="item.image" class="menu-img" />
 
         <div class="menu-text">
           <div class="menu-header">
-            <p class="menu-title">{{ item.name }}</p>
+             <p class="menu-title">{{ item.name }}</p>
+            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
+            
 
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
@@ -203,7 +209,7 @@
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)" (click)="openFoodDetail(item)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>

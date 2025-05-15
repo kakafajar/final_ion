@@ -3,13 +3,17 @@
   <!-- Profile & Notification -->
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <div style="display: flex; align-items: center;">
-      <ion-avatar>
-        <img src="assets/gambar/foto1.jpg" />
-      </ion-avatar>
       <div style="margin-left: 20px; padding-right: 10px;" style="color: #8B4513;">{{ username }}</div>
     </div>
     <ion-icon name="notifications-outline" size="large" style="color: #8B4513;"></ion-icon>
   </div>
+
+
+  <div style="text-align: center; margin-top: 20px; size: 100px;">
+  <img src="assets/bannercontoh.jpg" alt="Menu Banner" style="width: 100%; border-radius: 10px;" />
+</div>
+
+
  
   
   
@@ -18,22 +22,25 @@
   <ion-grid>
     <ion-row class="ion-align-items-center">
       <ion-col size="4">
-        <ion-button expand="block" class="custom-button" [routerLink]="['/dine-in']">
+        <ion-button id="open-loading" expand="block" class="custom-button" [routerLink]="['/dine-in']">
           <ion-icon name="restaurant-outline" slot="start" class="custom-icon"></ion-icon>
           DINE IN
-        </ion-button>        
+        </ion-button> 
+        <ion-loading class="custom-loading" trigger="open-loading" message="Loading..." [duration]="450"></ion-loading>       
       </ion-col>
       <ion-col size="4">
-        <ion-button expand="block" class="custom-button" [routerLink]="['/take-away']">
+        <ion-button id="open-takeaway" expand="block" class="custom-button" [routerLink]="['/take-away']">
           <ion-icon name="bag-outline" slot="start" class="custom-icon"></ion-icon>
           TAKE AWAY
         </ion-button>
+        <ion-loading class="custom-loading" trigger="open-takeaway" message="Loading..." [duration]="450"></ion-loading>       
       </ion-col>
       <ion-col size="4">
-        <ion-button expand="block" class="custom-button">
+        <ion-button id="open-reserve" expand="block" class="custom-button">
           <ion-icon name="calendar-outline" slot="start" class="custom-icon"></ion-icon>
           RESERVE
         </ion-button>
+        <ion-loading class="custom-loading" trigger="open-reser " message="Loading..." [duration]="450"></ion-loading>       
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -46,36 +53,23 @@
     <a href="#" style="color: #CD853F; text-decoration: none;">View All</a>
   </div>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngFor="let item of items" size="6" size-md="4" size-lg="2">
-        <ion-card class="menu-card">
-          <img [src]="item.img" class="menu-img" />
-          <div class="menu-text" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
-  
-              <div *ngIf="item.count > 0" style="display: flex; align-items: center; gap: 4px;">
-                <ion-button size="small" fill="clear" (click)="decrement(item.id)" style="--padding-start: 2px; --padding-end: 2px;">
-                  <ion-icon name="remove" style="font-size: 16px;"></ion-icon>
-                </ion-button>
-                <span style="font-size: 14px;">{{ item.count }}</span>
-                <ion-button size="small" fill="clear" (click)="increment(item.id)" style="--padding-start: 2px; --padding-end: 2px;">
-                  <ion-icon name="add" style="font-size: 16px;"></ion-icon>
-                </ion-button>
-              </div>
-  
-              <ion-button *ngIf="item.count === 0" fill="solid" size="small" color="dark" (click)="presentOrderType(item)" style="padding: 0;">
-                <ion-icon name="add" style="font-size: 18px;"></ion-icon>
-              </ion-button>
-            </div>
-  
-            <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.time }} | {{ item.sold }} sell</p>
+<ion-grid>
+  <ion-row>
+    <ion-col *ngFor="let item of items" size="6" size-md="4" size-lg="2">
+      <ion-card class="menu-card">
+        <img [src]="item.image" class="menu-img" />
+        <div class="menu-text" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
           </div>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+          <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.description }}</p>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+
   
 
 </ion-content>
@@ -90,13 +84,10 @@
       <ion-icon name="fast-food-outline"></ion-icon>
       <ion-label>Order</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="inbox">
-      <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-      <ion-label>Inbox</ion-label>
-    </ion-tab-button>
-    <ion-tab-button tab="profile">
+    <ion-tab-button href="/profil" id="open-profile">
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Profile</ion-label>
+      <ion-loading class="custom-loading" trigger="open-profile" message="Loading..." [duration]="450"></ion-loading>   
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>

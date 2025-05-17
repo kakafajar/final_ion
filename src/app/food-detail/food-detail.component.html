@@ -36,10 +36,10 @@
   </div>
 
   <!-- Checkout button -->
-<ion-footer class="ion-padding" style="background-color: white;">
-  <ion-button expand="block" color="light" (click)="checkout()" style="color: #f0d8b1;">
-    Checkout - Rp{{ food.price * food.count }}
-  </ion-button>
-</ion-footer>
+
+    <ion-button expand="block" (click)="goToOrderDetail()"  style="--background: orange; --color: #000000;">
+      Checkout - Rp{{ food.price * food.count }}
+    </ion-button>
+
 
 </ion-content>

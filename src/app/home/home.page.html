@@ -10,13 +10,13 @@
 
 
   <div style="text-align: center; margin-top: 20px; size: 100px;">
-  <img src="assets/bannercontoh.jpg" alt="Menu Banner" style="width: 100%; border-radius: 10px;" />
-</div>
+    <img src="assets/bannercontoh.jpg" alt="Menu Banner" style="width: 100%; border-radius: 10px;" />
+  </div>
 
 
- 
-  
-  
+
+
+
 
   <!-- Menu Buttons -->
   <ion-grid>
@@ -25,52 +25,52 @@
         <ion-button id="open-loading" expand="block" class="custom-button" [routerLink]="['/dine-in']">
           <ion-icon name="restaurant-outline" slot="start" class="custom-icon"></ion-icon>
           DINE IN
-        </ion-button> 
-        <ion-loading class="custom-loading" trigger="open-loading" message="Loading..." [duration]="450"></ion-loading>       
+        </ion-button>
+        <ion-loading class="custom-loading" trigger="open-loading" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
       <ion-col size="4">
         <ion-button id="open-takeaway" expand="block" class="custom-button" [routerLink]="['/take-away']">
           <ion-icon name="bag-outline" slot="start" class="custom-icon"></ion-icon>
           TAKE AWAY
         </ion-button>
-        <ion-loading class="custom-loading" trigger="open-takeaway" message="Loading..." [duration]="450"></ion-loading>       
+        <ion-loading class="custom-loading" trigger="open-takeaway" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
       <ion-col size="4">
         <ion-button id="open-reserve" expand="block" class="custom-button">
           <ion-icon name="calendar-outline" slot="start" class="custom-icon"></ion-icon>
           RESERVE
         </ion-button>
-        <ion-loading class="custom-loading" trigger="open-reser " message="Loading..." [duration]="450"></ion-loading>       
+        <ion-loading class="custom-loading" trigger="open-reser " message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
     </ion-row>
   </ion-grid>
-  
-  
+
+
 
   <!-- Popular Items -->
-  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+  <div style="display: flex; justify-content: space-between; margin-top: 20px; margin-right: 10px;">
     <h2 style="color: #8B4513;">Popular Items</h2>
-    <a href="#" style="color: #CD853F; text-decoration: none;">View All</a>
   </div>
 
-<ion-grid>
-  <ion-row>
-    <ion-col *ngFor="let item of items" size="6" size-md="4" size-lg="2">
-      <ion-card class="menu-card">
-        <img [src]="item.image" class="menu-img" />
-        <div class="menu-text" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let item of items" size="6" size-md="4" size-lg="2">
+        <ion-card class="menu-card">
+          <img [src]="item.image" class="menu-img" />
+          <div class="menu-text"
+            style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
+            </div>
+            <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.description }}</p>
           </div>
-          <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.description }}</p>
-        </div>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 
-  
+
 
 </ion-content>
 
@@ -87,7 +87,14 @@
     <ion-tab-button href="/profil" id="open-profile">
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Profile</ion-label>
-      <ion-loading class="custom-loading" trigger="open-profile" message="Loading..." [duration]="450"></ion-loading>   
+      <ion-loading class="custom-loading" trigger="open-profile" message="Loading..." [duration]="600"></ion-loading>
+    </ion-tab-button>
+    <ion-tab-button (click)="logout()" id="open-log-out">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <ion-label>Logout</ion-label>
+      <ion-loading trigger="custom-loading-trigger" message="Logging out..." spinner="dots" cssClass="custom-loading"
+        [duration]="500">
+      </ion-loading>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>

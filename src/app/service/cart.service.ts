@@ -15,6 +15,17 @@ export class CartService {
     }
   }
 
+  decreaseItemQty(item: any) {
+  const existing = this.items.find(i => i.id === item.id);
+  if (existing) {
+    existing.qty--;
+    if (existing.qty <= 0) {
+      this.items = this.items.filter(i => i.id !== item.id);
+    }
+  }
+}
+
+
   getCartItems() {
     return this.items;
   }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
-import { CartService } from '../cart.service';
+import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from  'src/app/data/menu';
+import { Route, Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -11,28 +12,25 @@ import { MENU_ITEMS } from  'src/app/data/menu';
   styleUrls: ['./take-away.page.scss'],
 })
 export class TakeAwayPage implements OnInit {
- selectedCategory: string = '';
+  selectedCategory: string = '';
   totalCount = 0;
+  cartItems: any[] = [];
+  orderType: string = '';
 
-  cartItems: any[] = [];        // ✅ Diperbaiki
-  orderType: string = '';       // ✅ Diperbaiki
-
-  items = MENU_ITEMS;  //ini bisa
-    // items = [...MENU_ITEMS];   //ini juga bisa
-
+  items = MENU_ITEMS;
   filteredItems: any[] = [];
 
   constructor(
     private modalController: ModalController,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.filterItemsByCategory();
-    this.cartItems = this.cartService.getCartItems(); // ✅ Ambil item dari cart
-    this.orderType = this.cartService.getOrderType(); // ✅ Tampilkan jenis pesanan (DINE IN, dsb)
-    // this.items = MENU_ITEMS;
-    this.filteredItems = this.items; //ada ini buat manggil itemsnya
+    this.cartItems = this.cartService.getCartItems();
+    this.orderType = this.cartService.getOrderType();
+    this.filteredItems = this.items;
   }
 
   filterItems(event: any) {
@@ -55,18 +53,22 @@ export class TakeAwayPage implements OnInit {
   }
 
   increment(id: number) {
-    const item = this.items.find(i => i.id === id);
-    if (item) {
-      item.count++;
-      this.updateTotalCount();
-    }
+  const item = this.items.find(i => i.id === id);
+  if (item) {
+    this.cartService.addItemToCart(item); // ✅ Hanya update dari cart
+    const cartItem = this.cartService.getCartItems().find(i => i.id === id);
+    item.count = cartItem?.qty ?? 1; // ✅ Sinkronkan dengan cart qty
+    this.updateTotalCount();
   }
+}
+
 
   decrement(id: number) {
     const item = this.items.find(i => i.id === id);
     if (item && item.count > 0) {
       item.count--;
       this.updateTotalCount();
+      // (opsional) kamu bisa bikin fungsi removeItem kalau count = 0
     }
   }
 
@@ -79,11 +81,6 @@ export class TakeAwayPage implements OnInit {
     this.totalCount = this.items.reduce((sum, i) => sum + i.count, 0);
   }
 
-  goToCheckout() {
-    console.log("Go to checkout with", this.totalCount, "items");
-    // tambahkan navigasi ke halaman checkout jika sudah tersedia
-  }
-
   async openFoodDetail(item: any) {
     const modal = await this.modalController.create({
       component: FoodDetailComponent,
@@ -93,6 +90,11 @@ export class TakeAwayPage implements OnInit {
       showBackdrop: true,
     });
     return await modal.present();
+  }
+
+  goToOrderDetail() {
+    this.cartService.setOrderType('Take Away');
+    this.router.navigate(['/order-detail']);
   }
 
 }

@@ -117,6 +117,32 @@ ion-content {
   color: #666;
 }
 
+.custom-loading {
+  --background: rgba(20, 20, 20, 0.85);
+  --spinner-color: #00ffcc;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+
+  .loading-wrapper {
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 20px #00ffcc66;
+    animation: pulse 1.5s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px #00ffcc66;
+  }
+  50% {
+    box-shadow: 0 0 20px #00ffccaa;
+  }
+  100% {
+    box-shadow: 0 0 10px #00ffcc66;
+  }
+}
 
 
 

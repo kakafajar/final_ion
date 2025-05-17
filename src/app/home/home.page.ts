@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { CartService } from '../cart.service';
+import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from  'src/app/data/menu'; 
+import { LoadingController } from '@ionic/angular';
 // pastikan path sesuai
 
 @Component({
@@ -19,7 +20,8 @@ export class HomePage {
   constructor(
     private alertController: AlertController,
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private loadingController: LoadingController
   ) {}
 
   ngOnInit() {
@@ -67,4 +69,22 @@ export class HomePage {
 
     await alert.present();
   }
+async logout() {
+  const loading = await this.loadingController.create({
+    message: 'logging out...',
+    duration: 500,
+    spinner: 'dots',
+    cssClass: 'custom-loading'
+  });
+  await loading.present();
+
+  setTimeout(() => {
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }, 2000);
+}
+
+
+
+
 }

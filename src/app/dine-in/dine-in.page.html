@@ -49,18 +49,18 @@
             
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id)">
+              <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
                 <ion-icon name="remove"></ion-icon>
               </ion-button>
               <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id)">
+              <ion-button size="small" fill="clear" (click)="increment(item.id); $event.stopPropagation()">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </div>
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id); $event.stopPropagation()">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>
@@ -82,44 +82,60 @@
 <ion-grid>
   <ion-row>
     <ion-col
-      *ngFor="let item of filteredItems"
-      [hidden]="item.category !== 'combo'"
-      size="6"
-      size-md="4"
-      size-lg="2"
-    >
-      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
-        <img [src]="item.image" class="menu-img" />
+  *ngFor="let item of filteredItems"
+  [hidden]="item.category !== 'special'"
+  size="6"
+  size-md="4"
+  size-lg="2"
+>
+  <ion-card class="menu-card" (click)="openFoodDetail(item)">
+    <img [src]="item.image" class="menu-img" />
 
-        <div class="menu-text">
-          <div class="menu-header">
-            <p class="menu-title">{{ item.name }}</p>
-            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-            
-            <!-- Jika count > 0 -->
-            <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id)">
-                <ion-icon name="remove"></ion-icon>
-              </ion-button>
-              <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id)">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </div>
+    <div class="menu-text">
+      <div class="menu-header">
+        <p class="menu-title">{{ item.name }}</p>
+        <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
 
-            <!-- Jika count = 0 -->
-            <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </ng-template>
-          </div>
-            <p class="menu-info">  
-            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} | 
-            <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} sell</p>
+        <!-- Jika count > 0 -->
+        <div *ngIf="item.count > 0; else addButton" class="counter">
+          <ion-button 
+            size="small" 
+            fill="clear" 
+            (click)="decrement(item.id); $event.stopPropagation()"
+          >
+            <ion-icon name="remove"></ion-icon>
+          </ion-button>
+          <span>{{ item.count }}</span>
+          <ion-button 
+            size="small" 
+            fill="clear" 
+            (click)="increment(item.id); $event.stopPropagation()"
+          >
+            <ion-icon name="add"></ion-icon>
+          </ion-button>
         </div>
-      </ion-card>
-    </ion-col>
+
+        <!-- Jika count = 0 -->
+        <ng-template #addButton>
+          <ion-button 
+            size="small" 
+            fill="solid" 
+            color="dark" 
+            (click)="increment(item.id); $event.stopPropagation()"
+          >
+            <ion-icon name="add"></ion-icon>
+          </ion-button>
+        </ng-template>
+      </div>
+
+      <p class="menu-info">
+        <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} |
+        <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} terjual
+      </p>
+    </div>
+  </ion-card>
+</ion-col>
+
   </ion-row>
 </ion-grid>
 
@@ -147,18 +163,18 @@
 
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id)">
+              <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
                 <ion-icon name="remove"></ion-icon>
               </ion-button>
               <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id)">
+              <ion-button size="small" fill="clear" (click)="increment(item.id); $event.stopPropagation()">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </div>
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id); $event.stopPropagation()">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>
@@ -198,18 +214,18 @@
 
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id)">
+              <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
                 <ion-icon name="remove"></ion-icon>
               </ion-button>
               <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id)">
+              <ion-button size="small" fill="clear" (click)="increment(item.id); $event.stopPropagation()">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </div>
 
             <!-- Jika count = 0 -->
             <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id)">
+              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id); $event.stopPropagation()">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </ng-template>
@@ -231,14 +247,14 @@
   <ion-toolbar style="
       --background: #f0d8b1; 
       color: black; 
-      border-radius: 12px; 
-      margin: 0 8px;
+      border-radius: 30px; 
+      margin: auto;
   ">
     <ion-title style="font-size: 16px;">
       Checkout ({{ totalCount }} item{{ totalCount > 1 ? 's' : '' }})
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button color="black" (click)="goToCheckout()">Checkout</ion-button>
+      <ion-button (click)="goToOrderDetail()">Checkout</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>

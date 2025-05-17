@@ -76,25 +76,24 @@
 
 <ion-footer>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home">
+    <ion-tab-button routerLink="/home">
       <ion-icon name="home-outline"></ion-icon>
       <ion-label>Home</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="order">
-      <ion-icon name="fast-food-outline"></ion-icon>
+
+    <ion-tab-button routerLink="/order-detail">
+      <ion-icon name="receipt-outline"></ion-icon>
       <ion-label>Order</ion-label>
     </ion-tab-button>
-    <ion-tab-button href="/profil" id="open-profile">
+
+    <ion-tab-button routerLink="/profil">
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Profile</ion-label>
-      <ion-loading class="custom-loading" trigger="open-profile" message="Loading..." [duration]="600"></ion-loading>
     </ion-tab-button>
-    <ion-tab-button (click)="logout()" id="open-log-out">
+
+    <ion-tab-button routerLink="/login">
       <ion-icon name="log-out-outline"></ion-icon>
       <ion-label>Logout</ion-label>
-      <ion-loading trigger="custom-loading-trigger" message="Logging out..." spinner="dots" cssClass="custom-loading"
-        [duration]="500">
-      </ion-loading>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>

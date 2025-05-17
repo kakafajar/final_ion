@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CartService } from '../service/cart.service';
-import { MENU_ITEMS } from  'src/app/data/menu'; 
+import { MENU_ITEMS } from  'src/app/data/menu';
 import { LoadingController } from '@ionic/angular';
 // pastikan path sesuai
 
@@ -84,7 +84,9 @@ async logout() {
   }, 2000);
 }
 
-
+goToReservasi() {
+    this.router.navigate(['/reservasi']);
+  }
 
 
 }

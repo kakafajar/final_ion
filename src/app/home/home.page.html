@@ -8,15 +8,9 @@
     <ion-icon name="notifications-outline" size="large" style="color: #8B4513;"></ion-icon>
   </div>
 
-
   <div style="text-align: center; margin-top: 20px; size: 100px;">
     <img src="assets/bannercontoh.jpg" alt="Menu Banner" style="width: 100%; border-radius: 10px;" />
   </div>
-
-
-
-
-
 
   <!-- Menu Buttons -->
   <ion-grid>
@@ -36,16 +30,14 @@
         <ion-loading class="custom-loading" trigger="open-takeaway" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
       <ion-col size="4">
-        <ion-button id="open-reserve" expand="block" class="custom-button">
+        <ion-button id="open-reserve" expand="block" class="custom-button" [routerLink]="['/reservasi']">
           <ion-icon name="calendar-outline" slot="start" class="custom-icon"></ion-icon>
           RESERVE
         </ion-button>
-        <ion-loading class="custom-loading" trigger="open-reser " message="Loading..." [duration]="450"></ion-loading>
+        <ion-loading class="custom-loading" trigger="open-reserve" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
     </ion-row>
   </ion-grid>
-
-
 
   <!-- Popular Items -->
   <div style="display: flex; justify-content: space-between; margin-top: 20px; margin-right: 10px;">
@@ -68,9 +60,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
-
-
 
 </ion-content>
 

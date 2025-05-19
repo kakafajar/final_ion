@@ -13,6 +13,17 @@ export class OrderDetailPage {
   selectedPaymentMethod: string = '';
   showPaymentOptions: boolean = false;
 
+  reservationData = {
+  name: '',
+  phone: '',
+  peopleCount: 2,
+  tanggal: '',
+  jam: '',
+  tableLocation: '',
+  tableStatus: ''
+};
+
+
   constructor(private cartService: CartService) {}
 
   ionViewWillEnter() {
@@ -51,5 +62,17 @@ export class OrderDetailPage {
   openPaymentOptions() {
     this.showPaymentOptions = true;
   }
+
+  getIcon(type: string): string {
+  switch (type) {
+    case 'Take Away': return 'bag-outline';
+    case 'Dine In': return 'restaurant-outline';
+    case 'Reservation': return 'calendar-outline';
+    default: return 'help-circle-outline';
+  }
+}
+
+  
+
 
 }

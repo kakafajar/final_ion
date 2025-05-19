@@ -30,7 +30,7 @@
         <ion-loading class="custom-loading" trigger="open-takeaway" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
       <ion-col size="4">
-        <ion-button id="open-reserve" expand="block" class="custom-button" [routerLink]="['/reservasi']">
+        <ion-button id="open-reserve" expand="block" class="custom-button" [routerLink]="['/reservasi-menu']">
           <ion-icon name="calendar-outline" slot="start" class="custom-icon"></ion-icon>
           RESERVE
         </ion-button>
@@ -54,7 +54,6 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <p class="menu-title" style="margin: 0; font-size: 14px;">{{ item.name }}</p>
             </div>
-            <p class="menu-info" style="margin: 0; font-size: 12px;">{{ item.description }}</p>
           </div>
         </ion-card>
       </ion-col>

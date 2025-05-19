@@ -27,6 +27,7 @@ export class DineInPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.cartService.setOrderType('dinein');
     this.filterItemsByCategory();
     this.cartItems = this.cartService.getCartItems();
     this.orderType = this.cartService.getOrderType();
@@ -112,7 +113,7 @@ export class DineInPage implements OnInit {
   }
 
   goToOrderDetail() {
-    this.cartService.setOrderType('Dine In');
+    this.cartService.setOrderType('dinein');
     this.router.navigate(['/order-detail']);
   }
 

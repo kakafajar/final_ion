@@ -5,7 +5,7 @@
 <ion-card class="ion-text-center" style="background: linear-gradient(to right, #ffecd2, #fcb69f); color: #333;">
   <ion-card-content>
     <ion-icon
-      [name]="getIcon(orderType)"
+      name="restaurant"
       style="font-size: 24px;">
     </ion-icon>
     <div style="font-weight: bold; font-size: 18px; margin-top: 6px;">
@@ -48,10 +48,10 @@
     <ion-input class="custom-input" type="tel" [(ngModel)]="reservationData.phone" placeholder="Nomor HP"></ion-input>
 
     <!-- Tanggal -->
-    <ion-input class="custom-input" placeholder="dd/mm/yyyy" [(ngModel)]="reservationData.tanggal"></ion-input>
+    <ion-input class="custom-input" placeholder="Tanggal Reservasi" [(ngModel)]="reservationData.tanggal"></ion-input>
 
     <!-- Jam -->
-    <ion-input class="custom-input" placeholder="hh:mm" [(ngModel)]="reservationData.jam"></ion-input>
+    <ion-input class="custom-input" placeholder="Jam reservasi" [(ngModel)]="reservationData.jam"></ion-input>
 
     <!-- Jumlah Orang -->
     <ion-item>
@@ -139,9 +139,11 @@
     </ion-list>
   </div>
 
-  <ion-button expand="block" color="success" class="ion-margin-top">
+<ion-button expand="block" color="success" class="ion-margin-top" (click)="submitOrder()">
   Order Now
 </ion-button>
+
+
 
 
 </ion-content>

@@ -46,7 +46,11 @@ const routes: Routes = [
   {
     path: 'reservasi-menu',
     loadChildren: () => import('./reservasi-menu/reservasi-menu.module').then( m => m.ReservasiMenuPageModule)
+  },  {
+    path: 'order',
+    loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule)
   },
+
 
 
 

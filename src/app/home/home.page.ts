@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from  'src/app/data/menu';
 import { LoadingController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 // pastikan path sesuai
 
 @Component({
@@ -21,7 +22,8 @@ export class HomePage {
     private alertController: AlertController,
     private router: Router,
     private cartService: CartService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -87,6 +89,8 @@ async logout() {
 goToReservasi() {
     this.router.navigate(['/reservasi']);
   }
-
+goToOrderPage() {
+  this.navCtrl.navigateForward('/order');
+}
 
 }

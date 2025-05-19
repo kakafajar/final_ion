@@ -2,42 +2,59 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private items: any[] = [];
+  private items: { [type: string]: any[] } = {}; // 👈 Kunci diubah jadi per-tipe
   private orderType = '';
 
   constructor() {
-    this.loadCartFromStorage(); // ⬅️ Muat data dari localStorage saat service dipanggil
+    this.loadCartFromStorage();
     this.loadOrderTypeFromStorage();
   }
 
   addItemToCart(item: any) {
-    const existing = this.items.find(i => i.id === item.id);
+    const type = this.orderType;
+    if (!this.items[type]) {
+      this.items[type] = [];
+    }
+
+    const existing = this.items[type].find(i => i.id === item.id);
     if (existing) {
       existing.qty++;
     } else {
-      this.items.push({ ...item, qty: 1 });
+      this.items[type].push({ ...item, qty: 1 });
     }
-    this.saveCartToStorage(); // ⬅️ Simpan ke localStorage
+
+    this.saveCartToStorage();
   }
 
   decreaseItemQty(item: any) {
-    const existing = this.items.find(i => i.id === item.id);
+    const type = this.orderType;
+    if (!this.items[type]) return;
+
+    const existing = this.items[type].find(i => i.id === item.id);
     if (existing) {
       existing.qty--;
       if (existing.qty <= 0) {
-        this.items = this.items.filter(i => i.id !== item.id);
+        this.items[type] = this.items[type].filter(i => i.id !== item.id);
       }
       this.saveCartToStorage();
     }
   }
 
   removeItemById(id: number) {
-    this.items = this.items.filter(i => i.id !== id);
-    this.saveCartToStorage();
+    const type = this.orderType;
+    if (this.items[type]) {
+      this.items[type] = this.items[type].filter(i => i.id !== id);
+      this.saveCartToStorage();
+    }
   }
 
   getCartItems() {
-    return this.items;
+    const type = this.orderType;
+    return this.items[type] || [];
+  }
+
+  getCartItemsByType(type: string) {
+    return this.items[type] || [];
   }
 
   setOrderType(type: string) {
@@ -49,12 +66,10 @@ export class CartService {
     return this.orderType;
   }
 
-  // 🧠 Simpan isi keranjang ke localStorage
   private saveCartToStorage() {
     localStorage.setItem('cartItems', JSON.stringify(this.items));
   }
 
-  // 📦 Ambil isi keranjang dari localStorage
   private loadCartFromStorage() {
     const saved = localStorage.getItem('cartItems');
     if (saved) {
@@ -69,9 +84,11 @@ export class CartService {
     }
   }
 
-  // 🧹 Tambahan opsional: untuk clear keranjang
   clearCart() {
-    this.items = [];
-    localStorage.removeItem('cartItems');
+    const type = this.orderType;
+    if (this.items[type]) {
+      this.items[type] = [];
+      this.saveCartToStorage();
+    }
   }
 }

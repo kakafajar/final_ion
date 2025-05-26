@@ -27,6 +27,7 @@ selectedCategory: string = '';
   ) {}
 
   ngOnInit() {
+    this.cartService.setOrderType('reservasi')
     this.filterItemsByCategory();
     this.cartItems = this.cartService.getCartItems();
     this.orderType = this.cartService.getOrderType();

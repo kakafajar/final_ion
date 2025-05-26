@@ -21,9 +21,9 @@ export class OrderPage {
 
   getIcon(type: string): string {
     switch (type) {
-      case 'Take Away': return 'bag-outline';
-      case 'Dine In': return 'restaurant-outline';
-      case 'Reservation': return 'calendar-outline';
+      case 'takeaway': return 'bag-outline';
+      case 'dinein': return 'restaurant-outline';
+      case 'reservasi': return 'calendar-outline';
       default: return 'help-circle-outline';
     }
   }

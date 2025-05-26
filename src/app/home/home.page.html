@@ -16,21 +16,21 @@
   <ion-grid>
     <ion-row class="ion-align-items-center">
       <ion-col size="4">
-        <ion-button id="open-loading" expand="block" class="custom-button" [routerLink]="['/dine-in']">
+        <ion-button id="open-loading" expand="block" class="custom-button" [routerLink]="['/dine-in', 'dinein']">
           <ion-icon name="restaurant-outline" slot="start" class="custom-icon"></ion-icon>
           DINE IN
         </ion-button>
         <ion-loading class="custom-loading" trigger="open-loading" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
       <ion-col size="4">
-        <ion-button id="open-takeaway" expand="block" class="custom-button" [routerLink]="['/take-away']">
+        <ion-button id="open-takeaway" expand="block" class="custom-button" [routerLink]="['/dine-in','takeaway']">
           <ion-icon name="bag-outline" slot="start" class="custom-icon"></ion-icon>
           TAKE AWAY
         </ion-button>
         <ion-loading class="custom-loading" trigger="open-takeaway" message="Loading..." [duration]="450"></ion-loading>
       </ion-col>
       <ion-col size="4">
-        <ion-button id="open-reserve" expand="block" class="custom-button" [routerLink]="['/reservasi-menu']">
+        <ion-button id="open-reserve" expand="block" class="custom-button" [routerLink]="['/dine-in','reservasi']">
           <ion-icon name="calendar-outline" slot="start" class="custom-icon"></ion-icon>
           RESERVE
         </ion-button>

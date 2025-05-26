@@ -17,16 +17,19 @@ export class OrderDetailPage {
     name: '',
     phone: '',
     peopleCount: 2,
-    tanggal: '',
-    jam: '',
+    tanggalDanJam:new Date().toISOString(),
     tableLocation: '',
     tableStatus: ''
   };
 
+  datetime : string = new Date().toISOString();
+
   constructor(
     private cartService: CartService,
     private navCtrl: NavController
-  ) {}
+  ) {
+    console.log(cartService.getCartItems());
+  }
 
   ionViewWillEnter() {
     this.items = this.cartService.getCartItems();
@@ -81,7 +84,7 @@ export class OrderDetailPage {
     items: this.items,
     orderType: this.orderType,
     paymentMethod: this.selectedPaymentMethod || '',
-    reservationData: this.orderType === 'Reservation' ? this.reservationData : null,
+    reservationData: this.orderType === 'reservasi' ? this.reservationData : null,
     total: this.getTotal(),
     timestamp: new Date().toISOString()
   };
@@ -100,14 +103,16 @@ export class OrderDetailPage {
 
   // ✅ Submit Order
   submitOrder() {
+    // console.log(this.reservationData.tanggalDanJam);
+    
     if (!this.selectedPaymentMethod) {
       alert('Silakan pilih metode pembayaran terlebih dahulu!');
       return;
     }
 
-    if (this.orderType === 'Reservation') {
-      const { name, phone, tanggal, jam } = this.reservationData;
-      if (!name || !phone || !tanggal || !jam) {
+    if (this.orderType === 'reservasi') {
+      const { name, phone, tanggalDanJam } = this.reservationData;
+      if (!name || !phone || !tanggalDanJam) {
         alert('Harap lengkapi data reservasi!');
         return;
       }

@@ -24,12 +24,8 @@ const routes: Routes = [
     loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
   },
   {
-    path: 'dine-in',
+    path: 'dine-in/:tipe',
     loadChildren: () => import('./dine-in/dine-in.module').then( m => m.DineInPageModule)
-  },
-  {
-    path: 'take-away',
-    loadChildren: () => import('./take-away/take-away.module').then( m => m.TakeAwayPageModule)
   },
   {
     path: 'profil',
@@ -46,7 +42,8 @@ const routes: Routes = [
   {
     path: 'reservasi-menu',
     loadChildren: () => import('./reservasi-menu/reservasi-menu.module').then( m => m.ReservasiMenuPageModule)
-  },  {
+  },
+  {
     path: 'order',
     loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule)
   },

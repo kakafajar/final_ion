@@ -9,6 +9,7 @@
       style="font-size: 24px;">
     </ion-icon>
     <div style="font-weight: bold; font-size: 18px; margin-top: 6px;">
+      
       {{ orderType }}
     </div>
   </ion-card-content>
@@ -35,7 +36,7 @@
     </ion-text>
   </ng-template>
 
-   <ion-card *ngIf="orderType === 'Reservation'">   <!--pakai untuk reservasi akan muncul -->
+   <ion-card *ngIf="orderType === 'reservasi'">   <!--pakai untuk reservasi akan muncul -->
   <ion-card-header>
     <ion-card-title>Data Reservasi</ion-card-title>
   </ion-card-header>
@@ -47,12 +48,14 @@
     <!-- Nomor HP -->
     <ion-input class="custom-input" type="tel" [(ngModel)]="reservationData.phone" placeholder="Nomor HP"></ion-input>
 
-    <!-- Tanggal -->
-    <ion-input class="custom-input" placeholder="Tanggal Reservasi" [(ngModel)]="reservationData.tanggal"></ion-input>
+    <!-- Tanggal dan Jam -->
+     <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
-    <!-- Jam -->
-    <ion-input class="custom-input" placeholder="Jam reservasi" [(ngModel)]="reservationData.jam"></ion-input>
-
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime [showDefaultButtons]="true" id="datetime" [(ngModel)]="reservationData.tanggalDanJam"></ion-datetime>
+  </ng-template>
+</ion-modal>
     <!-- Jumlah Orang -->
     <ion-item>
       <ion-label>Jumlah Orang</ion-label>

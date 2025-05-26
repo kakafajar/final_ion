@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
 import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from 'src/app/data/menu';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -23,14 +23,33 @@ export class DineInPage implements OnInit {
   constructor(
     private modalController: ModalController,
     private cartService: CartService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    let tipe : any = route.snapshot.paramMap.get('tipe');
+    if (tipe != null){
+      this.orderType = tipe;
+      console.log(this.orderType);
+      
+    } else{
+      this.orderType = "dinein"
+    }
+  }
+
+  resetItemCounts() {
+  this.items.forEach(item => {
+    item.count = 0;
+  });
+  this.updateTotalCount();
+}
+
 
   ngOnInit() {
-    this.cartService.setOrderType('dinein');
+    this.cartService.clearCart();
+    this.cartService.setOrderType(this.orderType);
     this.filterItemsByCategory();
+    this.resetItemCounts();
     this.cartItems = this.cartService.getCartItems();
-    this.orderType = this.cartService.getOrderType();
     this.filteredItems = this.items;
     this.items.forEach(item => {
       const cartItem = this.cartService.getCartItems().find(ci => ci.id === item.id);
@@ -113,7 +132,6 @@ export class DineInPage implements OnInit {
   }
 
   goToOrderDetail() {
-    this.cartService.setOrderType('dinein');
     this.router.navigate(['/order-detail']);
   }
 

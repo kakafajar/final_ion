@@ -43,9 +43,20 @@ const routes: Routes = [
     path: 'reservasi',
     loadChildren: () => import('./reservasi/reservasi.module').then( m => m.ReservasiPageModule)
   },
+  {
+    path: 'riwayat-pesanan',
+    loadChildren: () => import('./riwayat-pesanan/riwayat-pesanan.module').then( m => m.RiwayatPesananPageModule)
+  },
+  {
+    path: 'edit-profil',
+    loadChildren: () => import('./edit-profil/edit-profil.module').then( m => m.EditProfilPageModule)
+  },
+
 
 
 ];
+
+
 
 @NgModule({
   imports: [

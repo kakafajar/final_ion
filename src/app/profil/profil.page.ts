@@ -1,16 +1,27 @@
+// src/app/profil/profil.page.ts
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router'; // Import RouterLink
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular'; // Atau impor komponen Ionic individual
 
 @Component({
-  standalone:false,
   selector: 'app-profil',
   templateUrl: './profil.page.html',
   styleUrls: ['./profil.page.scss'],
+  standalone: true, // <-- INI KUNCINYA SEHINGGA NG6008 MUNCUL
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule, // <-- Pastikan ini (atau komponen Ionic individual) ada di sini
+    RouterLink  // <-- Tambahkan jika Anda menggunakan [routerLink] di template ProfilPage
+  ]
 })
 export class ProfilPage implements OnInit {
-  username: string = 'Guest';  // default kalau belum ada data
+  username: string = 'Guest';
   email: string = '';
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     const userData = localStorage.getItem('userData');
@@ -21,4 +32,24 @@ export class ProfilPage implements OnInit {
     }
   }
 
+  goToEditProfile() {
+    this.router.navigate(['/edit-profil']);
+  }
+
+  goToOrderHistory() {
+    this.router.navigate(['/riwayat-pesanan']);
+  }
+
+  goToPaymentMethods() {
+    this.router.navigate(['/metode-pembayaran']);
+  }
+
+  goToHelp() {
+    this.router.navigate(['/bantuan']);
+  }
+
+  logout() {
+    localStorage.removeItem('userData');
+    this.router.navigate(['/login']);
+  }
 }

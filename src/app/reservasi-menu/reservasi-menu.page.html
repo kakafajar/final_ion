@@ -2,16 +2,16 @@
 <ion-content class="ion-padding" >
 
   <!-- Search Bar -->
-    <ion-searchbar 
-      placeholder="Search your food" 
-      animated 
+    <ion-searchbar
+      placeholder="Search your food"
+      animated
       (ionInput)="filterItems($event)">
     </ion-searchbar>
   <!-- Dine In Section -->
   <ion-card>
     <ion-card-content class="ion-text-center">
-      <ion-icon name="bag" size="large"></ion-icon>
-      <h2>TAKE AWAY</h2>
+      <ion-icon name="calendar-outline" size="large"></ion-icon>
+      <h2>RESERVE</h2>
     </ion-card-content>
   </ion-card>
 
@@ -46,7 +46,7 @@
           <div class="menu-header">
             <p class="menu-title">{{ item.name }}</p>
             <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-            
+
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
               <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
@@ -98,17 +98,17 @@
 
         <!-- Jika count > 0 -->
         <div *ngIf="item.count > 0; else addButton" class="counter">
-          <ion-button 
-            size="small" 
-            fill="clear" 
+          <ion-button
+            size="small"
+            fill="clear"
             (click)="decrement(item.id); $event.stopPropagation()"
           >
             <ion-icon name="remove"></ion-icon>
           </ion-button>
           <span>{{ item.count }}</span>
-          <ion-button 
-            size="small" 
-            fill="clear" 
+          <ion-button
+            size="small"
+            fill="clear"
             (click)="increment(item.id); $event.stopPropagation()"
           >
             <ion-icon name="add"></ion-icon>
@@ -117,10 +117,10 @@
 
         <!-- Jika count = 0 -->
         <ng-template #addButton>
-          <ion-button 
-            size="small" 
-            fill="solid" 
-            color="dark" 
+          <ion-button
+            size="small"
+            fill="solid"
+            color="dark"
             (click)="increment(item.id); $event.stopPropagation()"
           >
             <ion-icon name="add"></ion-icon>
@@ -159,7 +159,7 @@
           <div class="menu-header">
              <p class="menu-title">{{ item.name }}</p>
             <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-            
+
 
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
@@ -180,8 +180,8 @@
             </ng-template>
           </div>
 
-          <p class="menu-info">  
-            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} | 
+          <p class="menu-info">
+            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} |
             <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} terjual</p>
         </div>
       </ion-card>
@@ -210,7 +210,7 @@
           <div class="menu-header">
              <p class="menu-title">{{ item.name }}</p>
             <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-            
+
 
             <!-- Jika count > 0 -->
             <div *ngIf="item.count > 0; else addButton" class="counter">
@@ -231,8 +231,8 @@
             </ng-template>
           </div>
 
-          <p class="menu-info">  
-            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} | 
+          <p class="menu-info">
+            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} |
             <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} terjual</p>
         </div>
       </ion-card>
@@ -240,14 +240,14 @@
   </ion-row>
 </ion-grid>
 
-  
+
 </ion-content>
 
 <ion-footer *ngIf="totalCount > 0" style="background: transparent; padding: 8px;">
   <ion-toolbar style="
-      --background: #f0d8b1; 
-      color: black; 
-      border-radius: 30px; 
+      --background: #f0d8b1;
+      color: black;
+      border-radius: 30px;
       margin: auto;
   ">
     <ion-title style="font-size: 16px;">
@@ -259,4 +259,26 @@
   </ion-toolbar>
 </ion-footer>
 
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button routerLink="/home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
 
+    <ion-tab-button routerLink="/order-detail">
+      <ion-icon name="receipt-outline"></ion-icon>
+      <ion-label>Order</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button routerLink="/profil">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button routerLink="/login">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <ion-label>Logout</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

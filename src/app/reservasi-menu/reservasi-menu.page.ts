@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
 import { CartService } from '../service/cart.service';
-import { MENU_ITEMS } from  'src/app/data/menu';
-import { Route, Router } from '@angular/router';
+import { MENU_ITEMS } from 'src/app/data/menu';
+import { Router } from '@angular/router';
 
 @Component({
-  standalone: false,
-  selector: 'app-take-away',
-  templateUrl: './take-away.page.html',
-  styleUrls: ['./take-away.page.scss'],
+  standalone:false,
+  selector: 'app-reservasi-menu',
+  templateUrl: './reservasi-menu.page.html',
+  styleUrls: ['./reservasi-menu.page.scss'],
 })
-export class TakeAwayPage implements OnInit {
-  selectedCategory: string = '';
+export class ReservasiMenuPage implements OnInit {
+selectedCategory: string = '';
   totalCount = 0;
   cartItems: any[] = [];
   orderType: string = '';
@@ -27,10 +27,17 @@ export class TakeAwayPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.cartService.setOrderType('reservasi')
     this.filterItemsByCategory();
     this.cartItems = this.cartService.getCartItems();
     this.orderType = this.cartService.getOrderType();
     this.filteredItems = this.items;
+    this.items.forEach(item => {
+      const cartItem = this.cartService.getCartItems().find(ci => ci.id === item.id);
+      item.count = cartItem?.qty ?? 0;
+    });
+
+    
   }
 
   filterItems(event: any) {
@@ -52,25 +59,38 @@ export class TakeAwayPage implements OnInit {
     this.filteredItems = this.items.filter(item => item.category === this.selectedCategory);
   }
 
+  //kode baru
   increment(id: number) {
   const item = this.items.find(i => i.id === id);
-  if (item) {
-    this.cartService.addItemToCart(item); // ✅ Hanya update dari cart
-    const cartItem = this.cartService.getCartItems().find(i => i.id === id);
-    item.count = cartItem?.qty ?? 1; // ✅ Sinkronkan dengan cart qty
-    this.updateTotalCount();
+  if (!item) return;
+
+  const existing = this.cartService.getCartItems().find(i => i.id === id);
+
+  if (!existing) {
+    item.count = 1;
+    this.cartService.addItemToCart({ ...item });
+  } else {
+    item.count = existing.qty + 1;
+    this.cartService.addItemToCart({ ...item });
   }
+
+  this.updateTotalCount();
+  }
+
+
+  //kode baru
+  decrement(id: number) {
+  const item = this.items.find(i => i.id === id);
+  if (!item || item.count <= 0) return;
+
+  this.cartService.decreaseItemQty(item);
+
+  const updatedItem = this.cartService.getCartItems().find(i => i.id === id);
+  item.count = updatedItem?.qty ?? 0;
+
+  this.updateTotalCount();
 }
 
-
-  decrement(id: number) {
-    const item = this.items.find(i => i.id === id);
-    if (item && item.count > 0) {
-      item.count--;
-      this.updateTotalCount();
-      // (opsional) kamu bisa bikin fungsi removeItem kalau count = 0
-    }
-  }
 
   presentOrderType(item: any) {
     item.count = 1;
@@ -93,8 +113,7 @@ export class TakeAwayPage implements OnInit {
   }
 
   goToOrderDetail() {
-    this.cartService.setOrderType('Take Away');
+    this.cartService.setOrderType('Reservation');
     this.router.navigate(['/order-detail']);
   }
-
 }

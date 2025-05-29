@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
 import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from 'src/app/data/menu';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -23,14 +23,40 @@ export class DineInPage implements OnInit {
   constructor(
     private modalController: ModalController,
     private cartService: CartService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    let tipe : any = route.snapshot.paramMap.get('tipe');
+    if (tipe != null){
+      this.orderType = tipe;
+      console.log(this.orderType);
+      
+    } else{
+      this.orderType = "dinein"
+    }
+  }
+
+  resetItemCounts() {
+  this.items.forEach(item => {
+    item.count = 0;
+  });
+  this.updateTotalCount();
+}
+
 
   ngOnInit() {
+    this.cartService.clearCart();
+    this.cartService.setOrderType(this.orderType);
     this.filterItemsByCategory();
+    this.resetItemCounts();
     this.cartItems = this.cartService.getCartItems();
-    this.orderType = this.cartService.getOrderType();
     this.filteredItems = this.items;
+    this.items.forEach(item => {
+      const cartItem = this.cartService.getCartItems().find(ci => ci.id === item.id);
+      item.count = cartItem?.qty ?? 0;
+    });
+
+    
   }
 
   filterItems(event: any) {
@@ -52,25 +78,38 @@ export class DineInPage implements OnInit {
     this.filteredItems = this.items.filter(item => item.category === this.selectedCategory);
   }
 
+  //kode baru
   increment(id: number) {
   const item = this.items.find(i => i.id === id);
-  if (item) {
-    this.cartService.addItemToCart(item); // ✅ Hanya update dari cart
-    const cartItem = this.cartService.getCartItems().find(i => i.id === id);
-    item.count = cartItem?.qty ?? 1; // ✅ Sinkronkan dengan cart qty
-    this.updateTotalCount();
+  if (!item) return;
+
+  const existing = this.cartService.getCartItems().find(i => i.id === id);
+
+  if (!existing) {
+    item.count = 1;
+    this.cartService.addItemToCart({ ...item });
+  } else {
+    item.count = existing.qty + 1;
+    this.cartService.addItemToCart({ ...item });
   }
+
+  this.updateTotalCount();
+  }
+
+
+  //kode baru
+  decrement(id: number) {
+  const item = this.items.find(i => i.id === id);
+  if (!item || item.count <= 0) return;
+
+  this.cartService.decreaseItemQty(item);
+
+  const updatedItem = this.cartService.getCartItems().find(i => i.id === id);
+  item.count = updatedItem?.qty ?? 0;
+
+  this.updateTotalCount();
 }
 
-
-  decrement(id: number) {
-    const item = this.items.find(i => i.id === id);
-    if (item && item.count > 0) {
-      item.count--;
-      this.updateTotalCount();
-      // (opsional) kamu bisa bikin fungsi removeItem kalau count = 0
-    }
-  }
 
   presentOrderType(item: any) {
     item.count = 1;
@@ -93,7 +132,8 @@ export class DineInPage implements OnInit {
   }
 
   goToOrderDetail() {
-    this.cartService.setOrderType('Dine In');
     this.router.navigate(['/order-detail']);
   }
+
+  
 }

@@ -1,0 +1,83 @@
+<ion-content class="ion-padding">
+  <ion-card *ngIf="orders.length === 0">
+    <ion-card-header>
+      <ion-card-title>Tidak ada pesanan</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Kamu belum membuat pesanan apa pun.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngFor="let order of orders; let i = index" (click)="toggleDetails(i)">
+    <ion-card-header>
+      <ion-card-subtitle>{{ order.timestamp | date:'short' }}</ion-card-subtitle>
+      <ion-card-title>
+        <ion-icon [name]="getIcon(order.orderType)" style="margin-right: 8px;"></ion-icon>
+        {{ order.orderType }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Metode Pembayaran: {{ order.paymentMethod }}</p>
+      <p>Total: Rp{{ order.total | number:'1.0-0' }}</p>
+      <p *ngIf="expandedIndex !== i" style="color: brown;">Klik untuk lihat detail</p>
+    </ion-card-content>
+
+    <!-- Detail hanya jika diperluas -->
+    <ng-container *ngIf="expandedIndex === i">
+      <ion-list>
+        <ion-item *ngFor="let item of order.items">
+          <ion-avatar slot="start">
+            <img [src]="item.image">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{ item.name }}</h2>
+            <p>{{ item.qty }}x - Rp{{ item.price * item.qty | number:'1.0-0' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
+      <ion-card *ngIf="order.reservationData">
+        <ion-card-header>
+          <ion-card-title>Data Reservasi</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Nama: {{ order.reservationData.name }}</p>
+          <p>Telepon: {{ order.reservationData.phone }}</p>
+          <p>Tanggal: {{ order.reservationData.tanggalDanJam }}</p>
+          <p>Jumlah Orang: {{ order.reservationData.peopleCount }}</p>
+          <p>Lokasi Meja: {{ order.reservationData.tableLocation }}</p>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </ion-card>
+
+  <ion-button expand="block" color="danger" (click)="clearOrders()" *ngIf="orders.length > 0">
+    Hapus Semua Pesanan
+  </ion-button>
+</ion-content>
+
+
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button routerLink="/home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button routerLink="/order">
+      <ion-icon name="receipt-outline"></ion-icon>
+      <ion-label>Order</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button routerLink="/profil">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button routerLink="/login">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <ion-label>Logout</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
+

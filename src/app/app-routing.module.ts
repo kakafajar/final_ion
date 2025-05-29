@@ -24,12 +24,8 @@ const routes: Routes = [
     loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
   },
   {
-    path: 'dine-in',
+    path: 'dine-in/:tipe',
     loadChildren: () => import('./dine-in/dine-in.module').then( m => m.DineInPageModule)
-  },
-  {
-    path: 'take-away',
-    loadChildren: () => import('./take-away/take-away.module').then( m => m.TakeAwayPageModule)
   },
   {
     path: 'profil',
@@ -40,8 +36,8 @@ const routes: Routes = [
     loadChildren: () => import('./order-detail/order-detail.module').then( m => m.OrderDetailPageModule)
   },
   {
-    path: 'reservasi',
-    loadChildren: () => import('./reservasi/reservasi.module').then( m => m.ReservasiPageModule)
+    path: 'reservasi-menu',
+    loadChildren: () => import('./reservasi-menu/reservasi-menu.module').then( m => m.ReservasiMenuPageModule)
   },
   {
     path: 'riwayat-pesanan',
@@ -51,12 +47,11 @@ const routes: Routes = [
     path: 'edit-profil',
     loadChildren: () => import('./edit-profil/edit-profil.module').then( m => m.EditProfilPageModule)
   },
-
-
-
+  {
+    path: 'order',
+    loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule)
+  }
 ];
-
-
 
 @NgModule({
   imports: [

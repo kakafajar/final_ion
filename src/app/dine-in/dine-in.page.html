@@ -10,8 +10,18 @@
   <!-- Dine In Section -->
   <ion-card>
     <ion-card-content class="ion-text-center">
-      <ion-icon name="restaurant" size="large"></ion-icon>
-      <h2>DINE IN</h2>
+      <div *ngIf="orderType === 'dinein'">
+        <ion-icon name="restaurant" size="large"></ion-icon>
+        <h2>DINE IN</h2>
+      </div>
+      <div *ngIf="orderType === 'reservasi'">
+        <ion-icon name="calendar-outline" size="large"></ion-icon>
+        <h2>RESERVE</h2>
+      </div>
+      <div *ngIf="orderType === 'takeaway'">
+        <ion-icon name="bag" size="large"></ion-icon>
+        <h2>TAKE AWAY</h2>
+      </div>
     </ion-card-content>
   </ion-card>
 

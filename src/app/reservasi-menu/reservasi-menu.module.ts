@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TakeAwayPageRoutingModule } from './take-away-routing.module';
+import { ReservasiMenuPageRoutingModule } from './reservasi-menu-routing.module';
 
-import { TakeAwayPage } from './take-away.page';
+import { ReservasiMenuPage } from './reservasi-menu.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TakeAwayPageRoutingModule
+    ReservasiMenuPageRoutingModule
   ],
-  declarations: [TakeAwayPage]
+  declarations: [ReservasiMenuPage]
 })
-export class TakeAwayPageModule {}
+export class ReservasiMenuPageModule {}

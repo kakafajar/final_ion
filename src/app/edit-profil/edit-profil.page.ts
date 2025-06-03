@@ -12,16 +12,12 @@ import {
 
 @Component({
   selector: 'app-edit-profil',
-  templateUrl: './edit-profil.page.html', // Diperbaiki: sesuaikan dengan nama file yang benar
-  styleUrls: ['./edit-profil.page.scss'], // Diperbaiki: sesuaikan dengan nama file yang benar
+  templateUrl: './edit-profil.page.html',
+  styleUrls: ['./edit-profil.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-  ],
+  imports: [CommonModule, FormsModule, IonicModule],
 })
-export class EditProfilPage implements OnInit { // Ubah nama class menjadi EditProfilPage
+export class EditProfilPage implements OnInit {
   user = {
     avatar: 'assets/icon/profil.jpg',
     username: '',
@@ -47,12 +43,10 @@ export class EditProfilPage implements OnInit { // Ubah nama class menjadi EditP
   }
 
   ionViewWillEnter() {
-    // Anda bisa memanggil loadUserData() di sini jika ingin data
-    // selalu diperbarui setiap kali halaman ini dibuka
+    this.loadUserData();
   }
 
   loadUserData() {
-    // Ambil data dari localStorage
     const storedUserData = localStorage.getItem('userData');
     if (storedUserData) {
       const parsedData = JSON.parse(storedUserData);
@@ -71,22 +65,17 @@ export class EditProfilPage implements OnInit { // Ubah nama class menjadi EditP
   }
 
   async saveProfile() {
-    // Validasi input sederhana
     if (!this.user.username.trim() || !this.user.email.trim()) {
       this.presentAlert('Validasi Gagal', 'Nama pengguna dan email tidak boleh kosong.');
       return;
     }
 
-    // Validasi format email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(this.user.email)) {
       this.presentAlert('Validasi Gagal', 'Format email tidak valid.');
       return;
     }
 
-    console.log('Menyimpan profil pengguna:', this.user);
-
-    // Simpan ke localStorage
     const existingDataString = localStorage.getItem('userData');
     let dataToSave = {};
     if (existingDataString) {
@@ -104,14 +93,16 @@ export class EditProfilPage implements OnInit { // Ubah nama class menjadi EditP
       phone: this.user.phone,
       avatar: this.user.avatar,
     };
+
+    // Simpan ke dua tempat agar konsisten
     localStorage.setItem('userData', JSON.stringify(updatedUserData));
+    localStorage.setItem('loggedInUser', JSON.stringify(updatedUserData)); // Tambahan penting
 
     this.presentToast('Profil berhasil diperbarui!');
     this.navController.navigateBack('/profil');
   }
 
   async savePassword() {
-    // Validasi input
     if (!this.password.current || !this.password.new || !this.password.confirm) {
       this.presentAlert('Validasi Gagal', 'Semua field untuk ubah kata sandi harus diisi.');
       return;
@@ -126,7 +117,7 @@ export class EditProfilPage implements OnInit { // Ubah nama class menjadi EditP
     }
 
     console.log('Proses perubahan kata sandi...');
-    this.presentToast('Fungsi ubah kata sandi memerlukan integrasi backend (belum diimplementasikan di contoh ini).');
+    this.presentToast('Fungsi ubah kata sandi memerlukan integrasi backend (belum diimplementasikan).');
     this.password = { current: '', new: '', confirm: '' };
   }
 

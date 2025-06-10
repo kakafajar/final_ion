@@ -1,151 +1,164 @@
 ion-content {
-  --background: #F5F5F5; /* White Smoke */
-}
+  --background: #f9f9f9;
+  padding: 16px;
 
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
 
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  
-}
+    ion-avatar {
+      width: 48px;
+      height: 48px;
+    }
 
-.username {
-  flex: 1;
-  margin-left: 16px;
-  font-weight: bold;
-  font-size: 18px;
-}
+    .user-info {
+      margin-left: 10px;
 
-.notif-icon {
-  font-size: 24px;
-}
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #777;
+      }
 
+      strong {
+        font-size: 16px;
+        color: #000;
+      }
+    }
 
-
-
-.search-bar {
-  margin: 20px 0;
-}
-
-.quick-menu {
-  display: flex;
-  gap: 10px;
-  justify-content: space-around;
-  margin-bottom: 20px;
-}
-
-.menu-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.custom-button {
-  --background: #8B4513;
-  --color: white;
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  height: 48px;
-  font-size: 13px;
-}
-
-.custom-icon {
-  font-size: 16px;
-}
-
-
-.banner-slider img {
-  width: 100%;
-  height: 200px;
-  border-radius: 10px;
-}
-
-.section-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px 0 5px;
-}
-
-.popular-items {
-  display: flex;
-  gap: 10px;
-  color: #8B4513;
-}
-
-.item-card img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-}
-
-.menu-card {
-  border-radius: 15px;
-  overflow: hidden;
-  background: #fffaf3; /* krem hangat */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.menu-img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-}
-
-.menu-text {
-  padding: 6px 10px; /* kecil saja */
-}
-
-.menu-title {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 0;
-  color: #4E342E;
-}
-
-.menu-info {
-  font-size: 12px;
-  margin: 2px 0 0 0;
-  color: #666;
-}
-
-.custom-loading {
-  --background: rgba(20, 20, 20, 0.85);
-  --spinner-color: #00ffcc;
-  color: #ffffff;
-  font-weight: bold;
-  text-align: center;
-
-  .loading-wrapper {
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 0 20px #00ffcc66;
-    animation: pulse 1.5s infinite;
+    ion-icon {
+      font-size: 24px;
+      color: #333;
+    }
   }
-}
 
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 10px #00ffcc66;
+  .promo-card {
+    background-color: #FF6B00;
+    color: white;
+    border-radius: 12px;
+    padding: 16px;
+
+    h3 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    ion-button {
+      --background: white;
+      --color: #FF6B00;
+      --border-radius: 8px;
+    }
   }
-  50% {
-    box-shadow: 0 0 20px #00ffccaa;
+
+ .layanan-card {
+  --background: #fff;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  ion-item {
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
   }
-  100% {
-    box-shadow: 0 0 10px #00ffcc66;
+
+  ion-avatar {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon-wrapper {
+      border-radius: 12px;
+      padding: 10px;
+
+      ion-icon {
+        font-size: 22px;
+        color: #fff;
+      }
+    }
+  }
+
+  ion-label {
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0;
+      color: #000;
+    }
+
+    p {
+      font-size: 13px;
+      color: #666;
+      margin: 2px 0 0;
+    }
+  }
+
+  ion-icon[slot="end"] {
+    font-size: 20px;
+    color: #999;
   }
 }
 
 
+  .statistik-section {
+    margin-top: 20px;
 
+    h4 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #000;
+    }
 
+    .stat-boxes {
+      display: flex;
+      justify-content: space-between;
 
+      .stat-box {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        margin-right: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
+        &:last-child {
+          margin-right: 0;
+        }
+
+        p {
+          margin: 0;
+
+          &:first-child {
+            font-weight: bold;
+            font-size: 20px;
+          }
+
+          &:last-child {
+            font-size: 13px;
+            color: #666;
+          }
+        }
+
+        &.done {
+          p:first-child {
+            color: #1E90FF;
+          }
+        }
+
+        &.total {
+          p:first-child {
+            color: #00C48C;
+          }
+        }
+      }
+    }
+  }
+}

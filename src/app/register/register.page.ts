@@ -13,6 +13,9 @@ export class RegisterPage {
   email = '';
   phone = '';
   password = '';
+  confirmPassword: string = '';
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -21,29 +24,65 @@ export class RegisterPage {
   ) {}
 
   async register() {
-    const success = this.authService.register({
-      username: this.username,
-      email: this.email,
-      phone: this.phone,
-      password: this.password,
-    });
-
+  // Validasi format email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(this.email)) {
     const toast = await this.toastController.create({
-      message: success ? 'Registrasi berhasil!' : 'Email atau No HP sudah digunakan.',
+      message: 'Format email tidak valid.',
       duration: 2000,
-      color: success ? 'success' : 'danger',
+      color: 'danger',
     });
-    toast.present();
+    await toast.present();
+    return;
+  }
+
+  // Validasi nomor HP hanya angka
+const phoneRegex = /^[0-9]+$/;
+if (!phoneRegex.test(this.phone)) {
+  const toast = await this.toastController.create({
+    message: 'Nomor HP hanya boleh berisi angka.',
+    duration: 2000,
+    color: 'danger',
+  });
+  await toast.present();
+  return;
+}
+
+
+  const success = this.authService.register({
+    username: this.username,
+    email: this.email,
+    phone: this.phone,
+    password: this.password,
+  });
+
+  const toast = await this.toastController.create({
+    message: success ? 'Registrasi berhasil!' : 'Email atau No HP sudah digunakan.',
+    duration: 2000,
+    color: success ? 'success' : 'danger',
+  });
+  await toast.present();
 
   if (success) {
-      // Simpan data username dan email ke localStorage
-      localStorage.setItem('userData', JSON.stringify({
-        username: this.username,
-        email: this.email
-      }));
+    localStorage.setItem('userData', JSON.stringify({
+      username: this.username,
+      email: this.email
+    }));
 
-      // Navigasi ke login atau langsung ke profil sesuai kebutuhan
-      this.navCtrl.navigateForward('/login');
-    }
+    this.navCtrl.navigateForward('/login');
   }
+}
+
+togglePassword() {
+  this.showPassword = !this.showPassword;
+}
+
+goToLogin() {
+  this.navCtrl.navigateBack('/login');
+}
+
+toggleConfirmPassword() {
+  this.showConfirmPassword = !this.showConfirmPassword;
+}
+
 }

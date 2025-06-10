@@ -15,6 +15,7 @@ import { NavController } from '@ionic/angular';
 })
 export class HomePage {
   username: string = '';
+  greeting: string = '';
 
   items =  MENU_ITEMS;
 
@@ -32,45 +33,31 @@ export class HomePage {
       const user = JSON.parse(savedUser);
       this.username = user.username;
     }
+
+    this.setGreeting();
+  }
+
+  setGreeting() {
+    const now = new Date();
+
+    // Konversi ke Waktu Indonesia Barat (WIB)
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const wib = new Date(utc + 7 * 3600000); // UTC+7
+
+    const hour = wib.getHours();
+
+    if (hour >= 4 && hour < 11) {
+      this.greeting = 'Selamat Pagi';
+    } else if (hour >= 11 && hour < 15) {
+      this.greeting = 'Selamat Siang';
+    } else if (hour >= 15 && hour < 18) {
+      this.greeting = 'Selamat Sore';
+    } else {
+      this.greeting = 'Selamat Malam';
+    }
   }
 
 
-
-  async presentOrderType(item: any) {
-    const alert = await this.alertController.create({
-      header: 'Select Order Type',
-      message: `Choose order type for:${item.name}`,
-      buttons: [
-        {
-          text: 'DINE IN',
-          handler: () => {
-            this.cartService.setOrderType('dine-in');
-            this.cartService.addItemToCart(item);
-            this.router.navigate(['/dine-in'], {
-              state: {
-                item: item,
-                category: item.category // ← kirim kategori
-              }
-            });
-          }
-        },
-        {
-          text: 'TAKE AWAY',
-          handler: () => {
-            this.cartService.setOrderType('take-away');
-            this.cartService.addItemToCart(item);
-            this.router.navigate(['/take-away']);
-          }
-        },
-        {
-          text: 'CANCEL',
-          role: 'cancel'
-        }
-      ]
-    });
-
-    await alert.present();
-  }
 async logout() {
   const loading = await this.loadingController.create({
     message: 'logging out...',

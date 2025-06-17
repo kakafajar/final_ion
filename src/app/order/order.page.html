@@ -48,6 +48,16 @@
           <p>Lokasi Meja: {{ order.reservationData.tableLocation }}</p>
         </ion-card-content>
       </ion-card>
+
+       <ion-card *ngIf="order.paymentProof">
+      <ion-card-header>
+        <ion-card-title>Bukti Pembayaran</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <img [src]="order.paymentProof" alt="Bukti Pembayaran" style="width: 100%; border-radius: 8px;" />
+      </ion-card-content>
+    </ion-card>
+
     </ng-container>
   </ion-card>
 

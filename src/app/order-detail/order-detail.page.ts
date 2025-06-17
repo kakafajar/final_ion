@@ -6,12 +6,16 @@ import { ActionSheetButton, NavController } from '@ionic/angular';
   standalone: false,
   selector: 'app-order-detail',
   templateUrl: './order-detail.page.html',
+  styleUrls: ['./order-detail.page.scss'],
 })
 export class OrderDetailPage {
   items: any[] = [];
   orderType: string = '';
   selectedPaymentMethod: string = '';
   showPaymentOptions: boolean = false;
+  paymentProof: string | ArrayBuffer | null = null;
+  
+
 
   reservationData = {
     name: '',
@@ -83,7 +87,8 @@ export class OrderDetailPage {
   const newOrder = {
     items: this.items,
     orderType: this.orderType,
-    paymentMethod: this.selectedPaymentMethod || '',
+    paymentMethod: this.selectedPaymentMethod,
+    paymentProof: this.paymentProof,
     reservationData: this.orderType === 'reservasi' ? this.reservationData : null,
     total: this.getTotal(),
     timestamp: new Date().toISOString()
@@ -105,10 +110,10 @@ export class OrderDetailPage {
   submitOrder() {
     // console.log(this.reservationData.tanggalDanJam);
     
-    if (!this.selectedPaymentMethod) {
-      alert('Silakan pilih metode pembayaran terlebih dahulu!');
-      return;
-    }
+  if (this.selectedPaymentMethod === 'QRIS' && !this.paymentProof) {
+    alert('Silakan upload bukti pembayaran QRIS terlebih dahulu.');
+    return;
+  }
 
     if (this.orderType === 'reservasi') {
       const { name, phone, tanggalDanJam } = this.reservationData;
@@ -122,4 +127,16 @@ export class OrderDetailPage {
     this.cartService.clearCart(); // Kosongkan keranjang setelah simpan
     this.navCtrl.navigateForward('/home'); // Arahkan ke halaman utama
   }
+
+  onImageSelected(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.paymentProof = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 }

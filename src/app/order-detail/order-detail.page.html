@@ -127,6 +127,20 @@
 </ion-action-sheet>
 
 
+<ng-container *ngIf="selectedPaymentMethod === 'QRIS'">
+  <ion-item lines="none">
+    <ion-label position="stacked">Upload Bukti Pembayaran</ion-label>
+    <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+  </ion-item>
+
+  <div *ngIf="paymentProof" style="margin: 16px 0;">
+    <ion-text color="medium">Preview:</ion-text>
+    <img [src]="paymentProof" style="max-width: 100%; border-radius: 8px; margin-top: 8px;" />
+  </div>
+</ng-container>
+
+
+
   <!-- ORDER SUMMARY -->
   <div style="margin-top: 24px;">
     <ion-text color="medium"><strong>ORDER SUMMARY</strong></ion-text>
@@ -158,7 +172,7 @@
       <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button routerLink="/order-detail">
+    <ion-tab-button routerLink="/order">
       <ion-icon name="receipt-outline"></ion-icon>
       <ion-label>Order</ion-label>
     </ion-tab-button>
@@ -168,9 +182,5 @@
       <ion-label>Profile</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button routerLink="/login">
-      <ion-icon name="log-out-outline"></ion-icon>
-      <ion-label>Logout</ion-label>
-    </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>

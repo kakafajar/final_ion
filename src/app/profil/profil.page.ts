@@ -23,12 +23,12 @@ export class ProfilPage implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const user = JSON.parse(userData);
-      this.username = user.username || 'Guest';
-      this.email = user.email || '';
+ngOnInit() {
+    const savedUser = localStorage.getItem('loggedInUser');
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      this.username = user.username;
+      this.email = user.email;
     }
   }
 

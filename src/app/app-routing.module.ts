@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -38,10 +38,6 @@ const routes: Routes = [
   {
     path: 'reservasi-menu',
     loadChildren: () => import('./reservasi-menu/reservasi-menu.module').then( m => m.ReservasiMenuPageModule)
-  },
-  {
-    path: 'riwayat-pesanan',
-    loadChildren: () => import('./riwayat-pesanan/riwayat-pesanan.module').then( m => m.RiwayatPesananPageModule)
   },
   {
     path: 'edit-profil',

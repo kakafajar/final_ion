@@ -4,6 +4,7 @@ import { FoodDetailComponent } from '../food-detail/food-detail.component';
 import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from 'src/app/data/menu';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   standalone: false,
@@ -24,7 +25,8 @@ export class DineInPage implements OnInit {
     private modalController: ModalController,
     private cartService: CartService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private alertController: AlertController
   ) {
     let tipe : any = route.snapshot.paramMap.get('tipe');
     if (tipe != null){
@@ -131,9 +133,40 @@ export class DineInPage implements OnInit {
     return await modal.present();
   }
 
-  goToOrderDetail() {
-    this.router.navigate(['/order-detail']);
+  async goToOrderDetail() {
+  const user = localStorage.getItem('loggedInUser');
+
+  if (!user) {
+    const alert = await this.alertController.create({
+      header: 'Login Diperlukan',
+      message: 'Silakan login atau daftar terlebih dahulu untuk melanjutkan checkout.',
+      buttons: [
+        {
+          text: 'Batal',
+          role: 'cancel'
+        },
+        {
+          text: 'Login',
+          handler: () => {
+            this.router.navigate(['/login']);
+          }
+        },
+        {
+          text: 'Daftar',
+          handler: () => {
+            this.router.navigate(['/register']);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    return;
   }
+
+  this.router.navigate(['/order-detail']);
+}
+
 
   
 }

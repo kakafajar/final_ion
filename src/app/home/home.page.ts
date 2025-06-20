@@ -27,15 +27,18 @@ export class HomePage {
     private navCtrl: NavController
   ) {}
 
-  ngOnInit() {
-    const savedUser = localStorage.getItem('loggedInUser');
-    if (savedUser) {
-      const user = JSON.parse(savedUser);
-      this.username = user.username;
-    }
-
-    this.setGreeting();
+  ionViewWillEnter() {
+  const savedUser = localStorage.getItem('loggedInUser');
+  if (savedUser) {
+    const user = JSON.parse(savedUser);
+    this.username = user.username;
+  } else {
+    this.username = '';
   }
+
+  this.setGreeting();
+}
+
 
   setGreeting() {
     const now = new Date();
@@ -69,6 +72,7 @@ async logout() {
 
   setTimeout(() => {
     localStorage.removeItem('token');
+    localStorage.removeItem('loggedInUser');
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }, 2000);
 }
@@ -79,5 +83,17 @@ goToReservasi() {
 goToOrderPage() {
   this.navCtrl.navigateForward('/order');
 }
+
+
+goToLogin() {
+  this.navCtrl.navigateForward('/login');
+}
+
+goToRegister() {
+  this.navCtrl.navigateForward('/register');
+}
+
+
+
 
 }

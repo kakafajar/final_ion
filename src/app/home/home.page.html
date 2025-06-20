@@ -1,15 +1,32 @@
 <ion-content class="ion-padding" style="--background: #f9f9f9;">
 
   <!-- Header -->
-  <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
-    <div style="display: flex; align-items: center;">
-      <div style="margin-left: 10px;">
-        <p style="margin: 0;">{{ greeting }}</p>
-        <strong style="font-size: 16px;">{{ username }}</strong>
-      </div>
+<!-- Header -->
+<!-- Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+  <div style="display: flex; flex-direction: column;">
+    <p style="margin: 0;">{{ greeting }}</p>
+    <div *ngIf="username; else belumLogin" style="font-size: 16px; font-weight: bold;">
+      {{ username }}
     </div>
-    <ion-icon name="notifications-outline" size="large"></ion-icon>
+    <ng-template #belumLogin>
+      <div style="display: flex; gap: 6px; margin-top: 4px;">
+        <ion-button size="small" fill="solid" (click)="goToLogin()"
+          style="--background: #FF9500; --color: white;">
+          LOGIN
+        </ion-button>
+        <ion-button size="small" fill="outline" (click)="goToRegister()"
+          style="--border-color: #FF9500; --color: #FF9500;">
+          DAFTAR
+        </ion-button>
+      </div>
+    </ng-template>
   </div>
+  <ion-icon name="notifications-outline" size="large"></ion-icon>
+</div>
+
+
+
 
   <!-- Promo Banner -->
   <div style="background: #FF6B00; color: white; border-radius: 12px; padding: 16px; margin-top: 10px;">
@@ -33,7 +50,7 @@
   </ion-item>
 </ion-card>
 
-<ion-card class="layanan-card dinein">
+<!-- <ion-card class="layanan-card dinein">
   <ion-item lines="none" button detail [routerLink]="['/dine-in','dinein']">
     <ion-avatar slot="start">
       <div class="icon-wrapper" style="background-color: #34C759;">
@@ -45,7 +62,7 @@
       <p>Layani pelanggan makan di tempat</p>
     </ion-label>
   </ion-item>
-</ion-card>
+</ion-card> -->
 
 <ion-card class="layanan-card takeaway">
   <ion-item lines="none" button detail [routerLink]="['/dine-in','takeaway']">
@@ -80,4 +97,14 @@
       <ion-label>Profil</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
+
+  <!-- Tombol logout di luar tab bar -->
+  <div style="text-align: center; padding: 8px;" *ngIf="username">
+  <ion-button color="danger" size="small" fill="clear" (click)="logout()">
+    <ion-icon name="log-out-outline" slot="start"></ion-icon>
+    Logout
+  </ion-button>
+</div>
+
 </ion-footer>
+

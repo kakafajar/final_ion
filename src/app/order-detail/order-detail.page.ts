@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CartService } from '../service/cart.service';
 import { ActionSheetButton, NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 
 @Component({
   standalone: false,
@@ -13,7 +15,8 @@ export class OrderDetailPage {
   orderType: string = '';
   selectedPaymentMethod: string = '';
   showPaymentOptions: boolean = false;
-  paymentProof: string | ArrayBuffer | null = null;
+  selectedTable: any = null;
+
   
 
 
@@ -30,8 +33,12 @@ export class OrderDetailPage {
 
   constructor(
     private cartService: CartService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private router: Router
   ) {
+    const nav = this.router.getCurrentNavigation();
+    this.selectedTable = nav?.extras?.state?.['selectedTable'] || JSON.parse(localStorage.getItem('selectedTable') || 'null');
+
     console.log(cartService.getCartItems());
   }
 
@@ -88,8 +95,8 @@ export class OrderDetailPage {
     items: this.items,
     orderType: this.orderType,
     paymentMethod: this.selectedPaymentMethod,
-    paymentProof: this.paymentProof,
     reservationData: this.orderType === 'reservasi' ? this.reservationData : null,
+    table: this.selectedTable,
     total: this.getTotal(),
     timestamp: new Date().toISOString()
   };
@@ -107,13 +114,11 @@ export class OrderDetailPage {
 }
 
   // ✅ Submit Order
-  submitOrder() {
-    // console.log(this.reservationData.tanggalDanJam);
-    
-  if (this.selectedPaymentMethod === 'QRIS' && !this.paymentProof) {
-    alert('Silakan upload bukti pembayaran QRIS terlebih dahulu.');
-    return;
-  }
+    submitOrder() {
+    if (!this.selectedPaymentMethod) {
+      alert('Silakan pilih metode pembayaran terlebih dahulu.');
+      return;
+    }
 
     if (this.orderType === 'reservasi') {
       const { name, phone, tanggalDanJam } = this.reservationData;
@@ -124,19 +129,9 @@ export class OrderDetailPage {
     }
 
     this.saveOrder();
-    this.cartService.clearCart(); // Kosongkan keranjang setelah simpan
-    this.navCtrl.navigateForward('/home'); // Arahkan ke halaman utama
+    this.cartService.clearCart();
+    this.navCtrl.navigateForward('/home');
   }
 
-  onImageSelected(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.paymentProof = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
 
 }

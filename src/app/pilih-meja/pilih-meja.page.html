@@ -1,0 +1,14 @@
+<!-- pilih-meja.page.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Pilih Meja</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let meja of mejaList" button (click)="pilihMeja(meja)">
+      {{ meja.nama }}
+    </ion-item>
+  </ion-list>
+</ion-content>

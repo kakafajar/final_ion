@@ -46,7 +46,12 @@ const routes: Routes = [
   {
     path: 'order',
     loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule)
+  },
+  {
+    path: 'pilih-meja',
+    loadChildren: () => import('./pilih-meja/pilih-meja.module').then( m => m.PilihMejaPageModule)
   }
+
 ];
 
 @NgModule({

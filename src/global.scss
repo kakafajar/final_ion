@@ -34,5 +34,29 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+// @import "@ionic/angular/css/palettes/dark.system.css";
+
+//* Style untuk tombol Login & Daftar */
+
+.custom-orange {
+  background-color: #ff9500 !important;
+  color: white !important;
+  border-radius: 6px !important;
+  padding: 6px 14px !important;
+  margin: 6px auto !important;
+  text-align: center !important;
+  font-weight: bold !important;
+}
+
+/* Tombol batal */
+.custom-cancel {
+  color: #f72727 !important;
+}
+
+/* Biar tombol alert vertikal & tengah */
+.custom-alert .alert-button-group {
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
 

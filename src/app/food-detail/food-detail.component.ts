@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { CartService } from '../service/cart.service';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-food-detail',
@@ -12,11 +14,13 @@ import { Router } from '@angular/router';
 })
 export class FoodDetailComponent implements OnInit {
   @Input() food: any;
+  selectedTable: any = null;
 
   constructor(
     private modalController: ModalController,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -43,20 +47,47 @@ export class FoodDetailComponent implements OnInit {
     }
   }
 
-  goToOrderDetail() {
-    // Tambahkan minimal 1 item jika belum ada
-    if (!this.food.count || this.food.count <= 0) {
-      this.cartService.addItemToCart(this.food);
-      this.food.count = 1;
+  async goToOrderDetail() {
+  const user = localStorage.getItem('loggedInUser');
+
+  if (!user) {
+    const alert = await this.alertController.create({
+        header: 'Login Diperlukan',
+        message: 'Silakan login atau daftar terlebih dahulu untuk melanjutkan checkout.',
+        buttons: [
+          {
+            text: 'Login',
+            role: 'login',
+            handler: () => {
+              this.router.navigate(['/login']);
+            },
+            cssClass: 'custom-orange' // 👉 kasih class ke tombol login
+          },
+          {
+            text: 'Daftar',
+            role: 'register',
+            handler: () => {
+              this.router.navigate(['/register']);
+            },
+            cssClass: 'custom-orange' // 👉 kasih class ke tombol daftar
+          },
+          {
+            text: 'Batal',
+            role: 'cancel',
+            cssClass: 'custom-cancel' // 👉 class untuk tombol batal
+          }
+        ],
+        cssClass: 'custom-alert' // 👉 class untuk alert container
+      });
+
+      await alert.present();
+      return;
     }
-
-    // Gunakan orderType dari service (sudah diset sebelumnya di dine-in.page.ts)
-    const orderType = this.cartService.getOrderType();
-    console.log('Order type:', orderType);
-
-    // Tutup modal lalu navigasi
-    this.modalController.dismiss().then(() => {
-      this.router.navigate(['/order-detail']);
-    });
-  }
+// Kirim data selectedTable ke order-detail
+  this.router.navigate(['/order-detail'], {
+    state: {
+      selectedTable: this.selectedTable
+    }
+  });
+}
 }

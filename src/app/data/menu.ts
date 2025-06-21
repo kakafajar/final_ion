@@ -39,15 +39,6 @@ export const MENU_ITEMS = [
     count: 0
   },
   {
-    id: 5,
-    name: 'Paket Combo',
-    category: 'combo',
-    price: 35000,
-    image: 'assets/img/combo.jpg',
-    description: 'Combo lengkap dengan minuman.',
-    count: 0
-  },
-  {
     id: 6,
     name: 'Mie jebew',
     category: 'mie',

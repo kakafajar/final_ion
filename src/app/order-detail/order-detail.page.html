@@ -15,6 +15,16 @@
   </ion-card-content>
 </ion-card>
 
+<!-- Info Meja (hanya jika reservasi) -->
+  <ion-card *ngIf="orderType === 'reservasi' && selectedTable">
+    <ion-card-header>
+      <ion-card-title>Informasi Meja Reservasi</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Nama Meja:</strong> {{ selectedTable.nama }}</p>
+    </ion-card-content>
+  </ion-card>
+
   <!-- ORDER ITEMS -->
   <ion-text color="medium"><strong>ORDER ITEMS</strong></ion-text>
   <ion-list *ngIf="items.length > 0; else noItems">
@@ -127,17 +137,6 @@
 </ion-action-sheet>
 
 
-<ng-container *ngIf="selectedPaymentMethod === 'QRIS'">
-  <ion-item lines="none">
-    <ion-label position="stacked">Upload Bukti Pembayaran</ion-label>
-    <input type="file" (change)="onImageSelected($event)" accept="image/*" />
-  </ion-item>
-
-  <div *ngIf="paymentProof" style="margin: 16px 0;">
-    <ion-text color="medium">Preview:</ion-text>
-    <img [src]="paymentProof" style="max-width: 100%; border-radius: 8px; margin-top: 8px;" />
-  </div>
-</ng-container>
 
 
 

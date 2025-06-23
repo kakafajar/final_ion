@@ -8,6 +8,7 @@ import { IonDatetime, IonDatetimeButton, IonModal } from '@ionic/angular/standal
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideHttpClient } from '@angular/common/http';
+import { SingletonService } from './service/singleton.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { provideHttpClient } from '@angular/common/http';
   ],
   providers: [
     provideHttpClient(),
+    SingletonService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-
-const apiUrl = "http://localhost:8000";
+import { SingletonService } from './singleton.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +9,11 @@ const apiUrl = "http://localhost:8000";
 export class AuthService {
   private http = inject(HttpClient);
 
+  constructor(private singleton: SingletonService){}
+
   login(email:string, password:string): Observable<any> 
   {
-    return this.http.post(apiUrl+"/api/login", {
+    return this.http.post(this.singleton.apiUrl+"/api/login", {
       "email" : email,
       'password' :password
     });
@@ -20,7 +21,7 @@ export class AuthService {
 
   register(username:string, email:string, no_hp:string, password:string): Observable<any>
   {
-    return this.http.post(apiUrl+"/api/register", {
+    return this.http.post(this.singleton.apiUrl+"/api/register", {
       "username" : username,
       "email" : email,
       "no_hp" : no_hp,
@@ -30,12 +31,8 @@ export class AuthService {
 
   logout()
   {
-    return this.http.post(apiUrl+"/api/logout",{}, {
-      headers : new HttpHeaders(
-      {
-        "Authorization": "Bearer " + localStorage.getItem("token")
-      }
-    )})
+    return this.http.post(this.singleton.apiUrl+"/api/logout",{}, {
+      headers : this.singleton.get_header()});
   }
   
 }

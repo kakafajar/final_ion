@@ -1,28 +1,28 @@
 
 <ion-content class="ion-padding" >
 
-  <ng-container *ngIf="orderType === 'reservasi' && !selectedTable">
+  <ng-container *ngIf="orderType === 'reservasi' && ! hasUnsavedTasks">
     <ion-card>
       <ion-card-header>
         <ion-card-title class="ion-text-center">Pilih Meja</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-list>
-          <ion-radio-group [(ngModel)]="mejaDipilih">
-            <ion-item *ngFor="let meja of mejaList">
-              <ion-label>{{ meja.nama }}</ion-label>
-              <ion-radio slot="end" [value]="meja"></ion-radio>
-            </ion-item>
-          </ion-radio-group>
-        </ion-list>
-        <ion-button expand="block" color="primary" (click)="konfirmasiPilihMeja()" [disabled]="!mejaDipilih">
+        <ion-radio-group [(ngModel)]="selectedMeja">
+          <ion-list >
+              <ion-item *ngFor="let meja of mejaList">
+                <ion-label>{{ meja.nama_meja }}</ion-label>
+                <ion-radio slot="end" [value]="meja"></ion-radio>
+              </ion-item>
+          </ion-list>
+        </ion-radio-group>
+        <ion-button expand="block" color="primary" (click)="konfirmasiPilihMeja()" disabled="{{mejaList.length == 0 || !selectedMeja}}">
           Konfirmasi
         </ion-button>
       </ion-card-content>
     </ion-card>
   </ng-container>
   
-  <ng-container *ngIf="orderType !== 'reservasi' || selectedTable">
+  <ng-container *ngIf="orderType !== 'reservasi' || hasUnsavedTasks">
 
     <!-- Search Bar -->
     <ion-searchbar placeholder="Search your food" animated (ionInput)="filterItems($event)">
@@ -34,7 +34,7 @@
         <div *ngIf="orderType === 'reservasi'">
           <ion-icon name="calendar-outline" size="large"></ion-icon>
           <h2>RESERVE</h2>
-          <p *ngIf="selectedTable">Meja: {{ selectedTable.nama }}</p>
+          <p *ngIf="selectedMeja">Meja: {{ selectedMeja.nama_meja }}</p>
         </div>
         <div *ngIf="orderType === 'takeaway'">
           <ion-icon name="bag" size="large"></ion-icon>
@@ -44,240 +44,64 @@
     </ion-card>
 
     <!-- Menu Tabs -->
-    <ion-segment [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange($event)" scrollable>
-      <ion-segment-button value="special">SPECIAL</ion-segment-button>
-      <ion-segment-button value="combo">COMBO</ion-segment-button>
-      <ion-segment-button value="nasi">NASI GORENG</ion-segment-button>
-      <ion-segment-button value="mie">MIE</ion-segment-button>
+    <ion-segment (ionChange)="onCategoryChange($event)" scrollable>
+      <ion-item *ngFor="let data of kategoriList">
+        <ion-segment-button value="{{ data.id }}">{{ data.nama_kategori }}</ion-segment-button>
+      </ion-item>
     </ion-segment>
 
-    <!-- Semua konten menu tetap sama seperti yang sudah kamu buat -->
-    <!-- Gunakan filteredItems, item.count, item.category, dsb -->
-    <!-- (POTONG DI SINI UNTUK SINGKAT) -->
+    <div *ngFor="let kategori of kategoriList">
+      <ion-text color="dark" class="section-title">
+        <h2 id="{{ kategori.id }}">{{ kategori.nama_kategori }} </h2>
+      </ion-text>
 
-    
-    <!-- Semua Section ditampilkan langsung -->
-
-<!-- SPECIAL -->
-<ion-text color="dark" class="section-title">
-  <h2 id="special">SPECIAL</h2>
-</ion-text>
-
-<ion-grid>
-  <ion-row>
-    <ion-col
-    *ngFor="let item of filteredItems"
-      [hidden]="item.category !== 'special'"
-      size="6"
-      size-md="4"
-      size-lg="2"
-      >
-      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
-        <img [src]="item.image" class="menu-img" />
-        
-        <div class="menu-text">
-          <div class="menu-header">
-            <p class="menu-title">{{ item.name }}</p>
-            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-            
-            <!-- Jika count > 0 -->
-            <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
-                <ion-icon name="remove"></ion-icon>
-              </ion-button>
-              <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id); $event.stopPropagation()">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </div>
-
-            <!-- Jika count = 0 -->
-            <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id); $event.stopPropagation()">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </ng-template>
-          </div>
-
-          <p class="menu-info">{{ item.time || '30 min' }} | {{ item.sold || 100 }} terjual</p>
-        </div>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-
-
-
-<!-- COMBO -->
-<ion-text color="dark">
-  <h2 id="combo">COMBO</h2>
-</ion-text>
-<ion-grid>
-  <ion-row>
-    <ion-col
-    *ngFor="let item of filteredItems"
-    [hidden]="item.category !== 'combo'"
-    size="6"
-    size-md="4"
-    size-lg="2"
->
-  <ion-card class="menu-card" (click)="openFoodDetail(item)">
-    <img [src]="item.image" class="menu-img" />
-    
-    <div class="menu-text">
-      <div class="menu-header">
-        <p class="menu-title">{{ item.name }}</p>
-        <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-        
-        <!-- Jika count > 0 -->
-        <div *ngIf="item.count > 0; else addButton" class="counter">
-          <ion-button
-          size="small"
-          fill="clear"
-            (click)="decrement(item.id); $event.stopPropagation()"
+      <ion-grid>
+        <ion-row>
+          <ion-col
+          *ngFor="let menu of menuList"
+          [hidden]="menu.id_kategori !== kategori.id || ! cartFilteredIds['includes'](menu.id) && searchTerm !==''"
+          size="6"
+          size-md="4"
+          size-lg="2"
           >
-            <ion-icon name="remove"></ion-icon>
-          </ion-button>
-          <span>{{ item.count }}</span>
-          <ion-button
-            size="small"
-            fill="clear"
-            (click)="increment(item.id); $event.stopPropagation()"
-          >
-            <ion-icon name="add"></ion-icon>
-          </ion-button>
-        </div>
+            <ion-card  class="menu-card" (click)="openFoodDetail(menu)">
+              <img [src]="menu.gambar_menu" class="menu-img" />
+              <div class="menu-text">
+                <div class="menu-header">
+                  <p class="menu-title">{{ menu.nama_menu }}</p>
+                  <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ menu.harga_menu }}</p>
+                </div>
 
-        <!-- Jika count = 0 -->
-        <ng-template #addButton>
-          <ion-button
-          size="small"
-          fill="solid"
-            color="dark"
-            (click)="increment(item.id); $event.stopPropagation()"
-          >
-            <ion-icon name="add"></ion-icon>
-          </ion-button>
-        </ng-template>
-      </div>
+                <div *ngIf="cartList['hasOwnProperty'](menu.id) && cartList[menu.id] > 0; else addButton" class="counter">
+                  <ion-button size="small" fill="clear" (click)="decreaseFromCart(menu.id); $event.stopPropagation()">
+                    <ion-icon name="remove"></ion-icon>
+                  </ion-button>
+                  <span>{{ cartList[menu.id] }}</span>
+                  <ion-button size="small" fill="clear" (click)="increaseToCart(menu.id); $event.stopPropagation()">
+                    <ion-icon name="add"></ion-icon>
+                  </ion-button>
+                </div>
 
-      <p class="menu-info">
-        <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} |
-        <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} terjual
-      </p>
+                <ng-template #addButton>
+                  <ion-button size="small" fill="solid" color="dark" (click)="increaseToCart(menu.id); $event.stopPropagation()">
+                    <ion-icon name="add"></ion-icon>
+                  </ion-button>
+                </ng-template>
+
+                <p class="menu-info">
+                  <ion-icon name="time-outline"></ion-icon>{{ menu.waktu_saji }}min
+                  <ion-icon name="flame-outline" color="danger"></ion-icon>
+                </p>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
-  </ion-card>
-</ion-col>
-
-</ion-row>
-</ion-grid>
-
-<!-- NASI GORENG -->
-<ion-text color="dark">
-  <h2 id="nasi">NASI GORENG</h2>
-</ion-text>
-<ion-grid>
-  <ion-row>
-    <ion-col
-      *ngFor="let item of filteredItems"
-      [hidden]="item.category !== 'nasi'"
-      size="6"
-      size-md="4"
-      size-lg="2"
-    >
-      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
-        <img [src]="item.image" class="menu-img" />
-
-        <div class="menu-text">
-          <div class="menu-header">
-            <p class="menu-title">{{ item.name }}</p>
-            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-
-
-            <!-- Jika count > 0 -->
-            <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
-                <ion-icon name="remove"></ion-icon>
-              </ion-button>
-              <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id); $event.stopPropagation()">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </div>
-            
-            <!-- Jika count = 0 -->
-            <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id); $event.stopPropagation()">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </ng-template>
-          </div>
-
-          <p class="menu-info">
-            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} |
-            <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} terjual</p>
-        </div>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-
-
-<!-- MIE -->
-<ion-text color="dark">
-  <h2 id="mie">MIE</h2>
-</ion-text>
-<ion-grid>
-  <ion-row>
-    <ion-col
-      *ngFor="let item of filteredItems"
-      [hidden]="item.category !== 'mie'"
-      size="6"
-      size-md="4"
-      size-lg="2"
-    >
-      <ion-card  class="menu-card" (click)="openFoodDetail(item)">
-        <img [src]="item.image" class="menu-img" />
-
-        <div class="menu-text">
-          <div class="menu-header">
-            <p class="menu-title">{{ item.name }}</p>
-            <p class="menu-price" style="margin-top: 8px; margin-bottom: 8px;">{{ item.price }}</p>
-
-            
-            <!-- Jika count > 0 -->
-            <div *ngIf="item.count > 0; else addButton" class="counter">
-              <ion-button size="small" fill="clear" (click)="decrement(item.id); $event.stopPropagation()">
-                <ion-icon name="remove"></ion-icon>
-              </ion-button>
-              <span>{{ item.count }}</span>
-              <ion-button size="small" fill="clear" (click)="increment(item.id); $event.stopPropagation()">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </div>
-
-            <!-- Jika count = 0 -->
-            <ng-template #addButton>
-              <ion-button size="small" fill="solid" color="dark" (click)="increment(item.id); $event.stopPropagation()">
-                <ion-icon name="add"></ion-icon>
-              </ion-button>
-            </ng-template>
-          </div>
-          
-          <p class="menu-info">
-            <ion-icon name="time-outline"></ion-icon> {{ item.time || '30 min' }} |
-            <ion-icon name="flame-outline" color="danger"></ion-icon> {{ item.sold || 100 }} terjual</p>
-        </div>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-</ng-container>
-
-
+  </ng-container>
 </ion-content>
 
-<ion-footer *ngIf="totalCount > 0" style="background: transparent; padding: 8px;">
+<ion-footer *ngIf="cartTotalCount > 0" style="background: transparent; padding: 8px;">
   <ion-toolbar style="
       --background: #f0d8b1;
       color: black;
@@ -285,7 +109,7 @@
       margin: auto;
   ">
     <ion-title style="font-size: 16px;">
-      Checkout ({{ totalCount }} item{{ totalCount > 1 ? 's' : '' }})
+      Checkout ({{ cartTotalCount }} item{{ cartTotalCount > 1 ? 's' : '' }})
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="goToOrderDetail()">Checkout</ion-button>

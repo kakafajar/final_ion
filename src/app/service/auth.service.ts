@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -26,6 +26,16 @@ export class AuthService {
       "no_hp" : no_hp,
       'password' :password
     });
+  }
+
+  logout()
+  {
+    return this.http.post(apiUrl+"/api/logout",{}, {
+      headers : new HttpHeaders(
+      {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    )})
   }
   
 }

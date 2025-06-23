@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CartService } from '../service/cart.service';
 import { MENU_ITEMS } from  'src/app/data/menu';
 import { LoadingController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
+import { AuthService } from '../service/auth.service';
 // pastikan path sesuai
 
 @Component({
@@ -22,8 +23,10 @@ export class HomePage {
   constructor(
     private alertController: AlertController,
     private router: Router,
+    private authService : AuthService,
     private cartService: CartService,
     private loadingController: LoadingController,
+    private toastController: ToastController,
     private navCtrl: NavController
   ) {}
 
@@ -69,11 +72,17 @@ async logout() {
   });
   await loading.present();
 
-  setTimeout(() => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
+  this.authService.logout()
+  .subscribe(data=>{
+    localStorage.clear();
     this.router.navigateByUrl('/login', { replaceUrl: true });
-  }, 2000);
+  }, async error=>{
+    const toast = await this.toastController.create({
+      message: error.message,
+      duration: 2000,
+      color: 'warning',
+    });
+  });
 }
 
 goToReservasi() {

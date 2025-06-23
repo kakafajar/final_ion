@@ -17,4 +17,11 @@ export class MenuService {
       {headers:this.singleton.get_header()}
     );
   }
+
+  find(id:string|number):Observable<any>
+  {
+    return this.http.get(this.singleton.apiUrl+"/api/menus/"+id,
+      {headers:this.singleton.get_header()}
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../service/auth.service';
 import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -14,6 +15,7 @@ export class LoginPage {
 
   constructor(
     private navCtrl: NavController,
+    private authService : AuthService,
     private toastController: ToastController
   ) {}
 
@@ -43,35 +45,32 @@ export class LoginPage {
     return;
   }
 
-  // Ambil data user dari localStorage
-  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  this.authService.login(this.identifier, this.password)
+  .subscribe(async data=>{
+    console.log(data);
+    
+    if(data.success){
+      localStorage.setItem("token", data.data.token);
+      localStorage.setItem('username', data.data.username);
 
-  const foundUser = users.find((user: any) =>
-    (user.email === this.identifier || user.phone === this.identifier) &&
-    user.password === this.password
-  );
+      const toast = await this.toastController.create({
+        message: 'Login berhasil!',
+        duration: 2000,
+        color: 'success',
+      });
+      await toast.present();
 
-  if (foundUser) {
-    localStorage.setItem('loggedIn', 'true');
-    localStorage.setItem('loggedInUser', JSON.stringify(foundUser));
-    localStorage.setItem('username', foundUser.username);
-
-    const toast = await this.toastController.create({
-      message: 'Login berhasil!',
-      duration: 2000,
-      color: 'success',
-    });
-    await toast.present();
-
-    this.navCtrl.navigateForward('/home');
-  } else {
-    const toast = await this.toastController.create({
-      message: 'Email / No HP atau Password salah!',
-      duration: 2000,
-      color: 'danger',
-    });
-    await toast.present();
-  }
+      this.navCtrl.navigateForward('/home');
+    }
+  }, async error=>{
+      const toast = await this.toastController.create({
+        message: error.error.data,
+        duration: 2000,
+        color: 'danger',
+      });
+      await toast.present();
+  });
+  
 }
 
 

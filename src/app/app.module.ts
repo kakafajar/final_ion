@@ -7,6 +7,7 @@ import { IonDatetime, IonDatetimeButton, IonModal } from '@ionic/angular/standal
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,10 +17,10 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    FormsModule,
-    // IonDatetime,
+    FormsModule
   ],
   providers: [
+    provideHttpClient(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

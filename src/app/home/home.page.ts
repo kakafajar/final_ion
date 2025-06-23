@@ -28,10 +28,9 @@ export class HomePage {
   ) {}
 
   ionViewWillEnter() {
-  const savedUser = localStorage.getItem('loggedInUser');
+  const savedUser = localStorage.getItem('username');
   if (savedUser) {
-    const user = JSON.parse(savedUser);
-    this.username = user.username;
+    this.username = savedUser;
   } else {
     this.username = '';
   }

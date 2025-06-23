@@ -1,55 +1,31 @@
-import { Injectable } from '@angular/core';
-import { User } from '../models/user.model'; // pastikan ini benar
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
+const apiUrl = "http://localhost:8000";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUser: User | null = null;
+  private http = inject(HttpClient);
 
-  register(user: User): boolean {
-    const users = this.getAllUsers();
-
-    const exists = users.some(u => u.email === user.email || u.phone === user.phone);
-    if (exists) {
-      return false; // Sudah terdaftar
-    }
-
-    users.push(user);
-    localStorage.setItem('users', JSON.stringify(users));
-    return true;
+  login(email:string, password:string): Observable<any> 
+  {
+    return this.http.post(apiUrl+"/api/login", {
+      "email" : email,
+      'password' :password
+    });
   }
 
-  login(identifier: string, password: string): boolean {
-    const users = this.getAllUsers();
-
-    const foundUser = users.find(u =>
-      (u.email === identifier || u.phone === identifier) && u.password === password
-    );
-
-    if (foundUser) {
-      this.currentUser = foundUser;
-      localStorage.setItem('loggedInUser', JSON.stringify(foundUser));
-      return true;
-    }
-
-    return false;
+  register(username:string, email:string, no_hp:string, password:string): Observable<any>
+  {
+    return this.http.post(apiUrl+"/api/register", {
+      "username" : username,
+      "email" : email,
+      "no_hp" : no_hp,
+      'password' :password
+    });
   }
-
-  getCurrentUser(): User | null {
-    if (this.currentUser) return this.currentUser;
-
-    const stored = localStorage.getItem('loggedInUser');
-    return stored ? JSON.parse(stored) : null;
-  }
-
-  logout(): void {
-    this.currentUser = null;
-    localStorage.removeItem('loggedInUser');
-  }
-
-  private getAllUsers(): User[] {
-    const data = localStorage.getItem('users');
-    return data ? JSON.parse(data) : [];
-  }
+  
 }

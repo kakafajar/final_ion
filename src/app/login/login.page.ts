@@ -47,10 +47,9 @@ export class LoginPage {
 
   this.authService.login(this.identifier, this.password)
   .subscribe(async data=>{
-    console.log(data);
-    
     if(data.success){
       localStorage.setItem("token", data.data.token);
+      localStorage.setItem("user_id", data.data.id);
       localStorage.setItem('username', data.data.username);
 
       const toast = await this.toastController.create({

@@ -4,6 +4,6 @@ import { ApiService } from './api-service';
 @Injectable({
   providedIn: 'root'
 })
-export class MejaService extends ApiService {
-    protected override apiTable: string = "mejas";
+export class OrderDetailService extends ApiService {
+  protected override apiTable: string = "order_details";
 }

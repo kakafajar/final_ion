@@ -5,11 +5,16 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SingletonService {
-    public apiUrl = "http://localhost:8000";
+    public apiUrl:string = "http://localhost:8000";
+    public temps:any ={};
 
     public get_header(){
         return new HttpHeaders({
             "Authorization" : "Bearer " + localStorage.getItem("token")
         });  
+    }
+
+    public clearTemps(){
+        this.temps = {};
     }
 }

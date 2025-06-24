@@ -133,12 +133,9 @@ export class OrderDetailPage implements OnInit{
         jenis_order: this.orderType
       });
       
-      orderRequest$.subscribe(response=>{
+      await lastValueFrom(orderRequest$).then(response=>{
         order = response.data;
-        // console.log(order);
       });
-
-      await lastValueFrom(orderRequest$);
 
       // creatine order detail
       this.cartList.forEach(async item=>{
@@ -148,43 +145,38 @@ export class OrderDetailPage implements OnInit{
           jumlah : item.jumlah
         });
         
-        orderDetail$.subscribe(()=>{}, async error=>{
+        await lastValueFrom(orderDetail$).catch(error=>{
           console.log(error);
         });
-
-        await lastValueFrom(orderDetail$);
       });
 
-      console.log(this.orderType);
-      
-      // creat reservasi
-      if (this.orderType === 'reservasi') {
-        console.log(this.selectedMeja);
-        console.log(order);
-        
-        
-        const reservasi$ = this.reservasiService.create({
-          user_id : localStorage.getItem("user_id"),
-          meja_id : this.selectedMeja.id,
-          order_id : order.id,
-          tanggal_dan_jam : this.tanggalDanJam.slice(0,-1).split("T").join(" ")
-        });
-        
-        reservasi$.subscribe(()=>{}, async error=>{
-            console.log(error);
-        });
-
-        await lastValueFrom(reservasi$);
-      }
-
-      this.transaksiService.create({
+      let transaksi:any;
+      const transaksi$ = this.transaksiService.create({
+        user_id : localStorage.getItem("user_id"),
         order_id : order.id,
         metode_pembayaran: this.selectedPaymentMethod,
         total_harga : this.totalPrice
-      })
-      .subscribe(()=>{},error=>{
+      });
+
+      await lastValueFrom(transaksi$).then(response=>{
+        transaksi = response.data;
+      }).catch(error=>{
         console.log(error);
       });
+
+      // creat reservasi
+      if (this.orderType === 'reservasi') {
+        const reservasi$ = this.reservasiService.create({
+          user_id : localStorage.getItem("user_id"),
+          meja_id : this.selectedMeja.id,
+          transaksi_id : transaksi.id,
+          tanggal_dan_jam : this.tanggalDanJam.slice(0,-1).split("T").join(" ")
+        });
+        
+        await lastValueFrom(reservasi$).catch(error=>{
+          console.log(error);
+        });
+      }
 
       this.navCtrl.navigateForward('/home');
     }

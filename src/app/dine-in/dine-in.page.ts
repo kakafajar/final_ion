@@ -2,12 +2,12 @@ import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
 import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { MejaService } from '../service/meja.service';
 import { KategoriService } from '../service/kategori.service';
 import { MenuService } from '../service/menu.service';
 import { canDeactivateComponent } from '../service/can-deactivate-guard.service';
+import { SingletonService } from '../service/singleton.service';
 
 @Component({
   standalone: false,
@@ -34,11 +34,11 @@ export class DineInPage implements OnInit, canDeactivateComponent {
     private router: Router,
     private route: ActivatedRoute,
     private ngZone: NgZone,
-    private location: Location,
     
     private modalController: ModalController,
     private alertController: AlertController,
     
+    private singletonService :SingletonService,
     private mejaService : MejaService,
     private kategoriService : KategoriService,
     private menuService : MenuService,
@@ -92,7 +92,6 @@ export class DineInPage implements OnInit, canDeactivateComponent {
         this.cartFilteredIds.push(menu.id);
         
       }
-      console.log(this.cartFilteredIds.includes(menu.id));
     });
   }
 
@@ -136,6 +135,7 @@ export class DineInPage implements OnInit, canDeactivateComponent {
   }
 
   async goToOrderDetail() {
+    this.hasUnsavedTasks=false;
     if (! localStorage.getItem("username")) {
       const alert = await this.alertController.create({
         header: 'Login Diperlukan',
@@ -158,6 +158,9 @@ export class DineInPage implements OnInit, canDeactivateComponent {
           {
             text: 'Batal',
             role: 'cancel',
+            handler: ()=>{
+              this.hasUnsavedTasks=true;
+            }
           }
         ],
       });
@@ -165,12 +168,16 @@ export class DineInPage implements OnInit, canDeactivateComponent {
       await alert.present();
       return;
     }
-    this.hasUnsavedTasks=false;
-    this.router.navigate(['/order-detail'], {
-      state: {
-        selectedTable: this.selectedMeja
+    else{
+      this.singletonService.temps = {
+        selectedMeja : this.selectedMeja,
+        cartListIds : this.cartList,
+        orderType : this.orderType
       }
-    });
+      this.router.navigate(['/order-detail']);
+      return;
+    }
+    
   }
 
   askToConfirm(nextState:RouterStateSnapshot){

@@ -34,5 +34,18 @@ export class AuthService {
     return this.http.post(this.singleton.apiUrl+"/api/logout",{}, {
       headers : this.singleton.get_header()});
   }
+
+  refreshUserInStorage(newUserData:string|object|any)
+  {
+    let userData = newUserData;
+    if ((typeof newUserData) === 'string'){
+      userData = JSON.parse(newUserData);
+      localStorage.setItem("user", newUserData);
+    }else if((typeof newUserData) === 'object'){
+      localStorage.setItem("user", JSON.stringify(newUserData));
+    }
+    localStorage.setItem("user_id", userData.id);
+    localStorage.setItem("username", userData.username);
+  }
   
 }

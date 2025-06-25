@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideHttpClient } from '@angular/common/http';
 import { SingletonService } from './service/singleton.service';
+import { AuthGuard } from './service/auth.guard';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { SingletonService } from './service/singleton.service';
   ],
   providers: [
     provideHttpClient(),
+    AuthGuard,
     SingletonService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

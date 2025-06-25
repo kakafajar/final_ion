@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './service/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    // canActivate: [AuthGuard]
   },
   {
     path: 'login',
@@ -17,39 +19,48 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'account',
-    loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule)
+    loadChildren: () => import('./account/account.module').then( m => m.AccountPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'dine-in/:tipe',
-    loadChildren: () => import('./dine-in/dine-in.module').then( m => m.DineInPageModule)
+    loadChildren: () => import('./dine-in/dine-in.module').then( m => m.DineInPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'profil',
-    loadChildren: () => import('./profil/profil.module').then( m => m.ProfilPageModule)
+    loadChildren: () => import('./profil/profil.module').then( m => m.ProfilPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'order-detail',
-    loadChildren: () => import('./order-detail/order-detail.module').then( m => m.OrderDetailPageModule)
+    loadChildren: () => import('./order-detail/order-detail.module').then( m => m.OrderDetailPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'reservasi-menu',
-    loadChildren: () => import('./reservasi-menu/reservasi-menu.module').then( m => m.ReservasiMenuPageModule)
+    loadChildren: () => import('./reservasi-menu/reservasi-menu.module').then( m => m.ReservasiMenuPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'edit-profil',
-    loadChildren: () => import('./edit-profil/edit-profil.module').then( m => m.EditProfilPageModule)
+    loadChildren: () => import('./edit-profil/edit-profil.module').then( m => m.EditProfilPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'order',
-    loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule)
+    loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'pilih-meja',
-    loadChildren: () => import('./pilih-meja/pilih-meja.module').then( m => m.PilihMejaPageModule)
+    loadChildren: () => import('./pilih-meja/pilih-meja.module').then( m => m.PilihMejaPageModule),
+    canActivate: [AuthGuard]
   }
 
 ];

@@ -44,6 +44,13 @@ export class AuthService {
       }, {headers:this.singleton.get_header()});
   }
 
+  checkToken()
+  {
+    return this.http.post(this.singleton.apiUrl+"/api/check_token",
+      {token : localStorage.getItem("token")}, {headers:this.singleton.get_header()}
+    )
+  }
+
   refreshUserInStorage(newUserData:string|object|any)
   {
     let userData = newUserData;

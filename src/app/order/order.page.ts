@@ -23,8 +23,6 @@ export class OrderPage implements OnInit {
       .subscribe(response=>{
 
         this.transaksis.push(...response.data);
-        console.log(response);
-        
       });
     });
   }

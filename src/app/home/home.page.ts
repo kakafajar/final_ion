@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CartService } from '../service/cart.service';
-import { MENU_ITEMS } from  'src/app/data/menu';
 import { LoadingController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { AuthService } from '../service/auth.service';
@@ -18,8 +17,6 @@ export class HomePage {
   username: string = '';
   greeting: string = '';
 
-  items =  MENU_ITEMS;
-
   constructor(
     private alertController: AlertController,
     private router: Router,
@@ -31,15 +28,13 @@ export class HomePage {
   ) {}
 
   ionViewWillEnter() {
-  const savedUser = localStorage.getItem('username');
-  if (savedUser) {
-    this.username = savedUser;
-  } else {
-    this.username = '';
-  }
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+      this.username = savedUsername;
+    }
 
-  this.setGreeting();
-}
+    this.setGreeting();
+  }
 
 
   setGreeting() {

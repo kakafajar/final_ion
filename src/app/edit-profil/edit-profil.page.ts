@@ -9,6 +9,9 @@ import {
   ToastController,
   NavController,
 } from '@ionic/angular';
+import { UserService } from '../service/user.service';
+import { AuthService } from '../service/auth.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-edit-profil',
@@ -31,33 +34,31 @@ export class EditProfilPage implements OnInit {
     confirm: '',
   };
 
+  storedUserData:any;
+
   constructor(
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private navController: NavController
+    private navController: NavController,
+    
+    private userService:UserService,
+    private authService:AuthService
   ) {}
 
   ngOnInit() {
-    this.loadUserData();
-  }
-
-  ionViewWillEnter() {
-    this.loadUserData();
-  }
-
-  loadUserData() {
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      const parsedData = JSON.parse(storedUserData);
-      this.user.username = parsedData.username || '';
-      this.user.email = parsedData.email || '';
-      this.user.phone = parsedData.phone || '';
-      this.user.avatar = parsedData.avatar || 'assets/icon/profil.jpg';
+    const rawUser: any = localStorage.getItem('user');
+    this.storedUserData = JSON.parse(rawUser);
+    if (this.storedUserData) {
+      this.user.username = this.storedUserData.username || '';
+      this.user.email = this.storedUserData.email || '';
+      this.user.phone = this.storedUserData.no_hp || '';
+      this.user.avatar = this.storedUserData.avatar || 'assets/icon/profil.jpg';
     } else {
       console.warn('Tidak ada data pengguna di localStorage untuk dimuat.');
     }
   }
+
 
   async changeAvatar() {
     console.log('Tombol Ubah Foto diklik.');
@@ -75,35 +76,22 @@ export class EditProfilPage implements OnInit {
       this.presentAlert('Validasi Gagal', 'Format email tidak valid.');
       return;
     }
-
-    const existingDataString = localStorage.getItem('userData');
-    let dataToSave = {};
-    if (existingDataString) {
-      try {
-        dataToSave = JSON.parse(existingDataString) || {};
-      } catch (e) {
-        console.error('Error parsing userData dari localStorage:', e);
-      }
-    }
-
-    const updatedUserData = {
-      ...dataToSave,
-      username: this.user.username,
-      email: this.user.email,
-      phone: this.user.phone,
-      avatar: this.user.avatar,
-    };
-
-    // Simpan ke dua tempat agar konsisten
-    localStorage.setItem('userData', JSON.stringify(updatedUserData));
-    localStorage.setItem('loggedInUser', JSON.stringify(updatedUserData)); // Tambahan penting
+    
+    await lastValueFrom(this.userService.update(this.storedUserData.id,{
+      username:this.user.username,
+      email:this.user.email,
+      no_hp:this.user.phone
+    }))
+    .then(response=>{
+      this.authService.refreshUserInStorage(response.data);
+    });
 
     this.presentToast('Profil berhasil diperbarui!');
-    this.navController.navigateBack('/profil');
+    this.router.navigateByUrl('/profil');
   }
 
   async savePassword() {
-    if (!this.password.current || !this.password.new || !this.password.confirm) {
+    if (!this.password.new || !this.password.confirm) {
       this.presentAlert('Validasi Gagal', 'Semua field untuk ubah kata sandi harus diisi.');
       return;
     }
@@ -116,9 +104,25 @@ export class EditProfilPage implements OnInit {
       return;
     }
 
-    console.log('Proses perubahan kata sandi...');
-    this.presentToast('Fungsi ubah kata sandi memerlukan integrasi backend (belum diimplementasikan).');
-    this.password = { current: '', new: '', confirm: '' };
+    const username=localStorage.getItem('username');
+    let passwordCorrect = true;
+    await lastValueFrom(this.authService.checkUser(username, this.password.current))
+    .catch(error=>{
+      this.presentAlert("Validasi Gagal", 'password salah!');
+      passwordCorrect = false;
+    })
+
+    if (passwordCorrect){
+      await lastValueFrom(this.userService.update(this.storedUserData.id,{
+        password:this.password.new,
+      })).catch(error=>{
+        console.log(error);
+        
+      });
+  
+      this.presentToast('Password berhasil diperbarui!');
+      this.router.navigateByUrl('/profil');
+    }
   }
 
   async presentToast(message: string, duration: number = 2500, color: string = 'success') {

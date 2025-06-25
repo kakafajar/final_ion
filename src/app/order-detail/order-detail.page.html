@@ -1,167 +1,110 @@
 
 <ion-content class="ion-padding">
-
-  <!-- ORDER STATUS -->
-<ion-card class="ion-text-center" style="background: linear-gradient(to right, #ffecd2, #fcb69f); color: #333;">
-  <ion-card-content>
-    <ion-icon
-      name="restaurant"
-      style="font-size: 24px;">
-    </ion-icon>
-    <div style="font-weight: bold; font-size: 18px; margin-top: 6px;">
-      
-      {{ orderType }}
-    </div>
-  </ion-card-content>
-</ion-card>
-
-<!-- Info Meja (hanya jika reservasi) -->
-  <ion-card *ngIf="orderType === 'reservasi' && selectedTable">
-    <ion-card-header>
-      <ion-card-title>Informasi Meja Reservasi</ion-card-title>
-    </ion-card-header>
+    <!-- ORDER STATUS -->
+  <ion-card class="ion-text-center" style="background: linear-gradient(to right, #ffecd2, #fcb69f); color: #333;">
     <ion-card-content>
-      <p><strong>Nama Meja:</strong> {{ selectedTable.nama }}</p>
+      <ion-icon
+        name="restaurant"
+        style="font-size: 24px;">
+      </ion-icon>
+      <div style="font-weight: bold; font-size: 18px; margin-top: 6px;">
+        
+        {{ orderType }}
+      </div>
     </ion-card-content>
   </ion-card>
 
-  <!-- ORDER ITEMS -->
-  <ion-text color="medium"><strong>ORDER ITEMS</strong></ion-text>
-  <ion-list *ngIf="items.length > 0; else noItems">
-    <ion-item *ngFor="let item of items">
-      <ion-avatar slot="start">
-        <img [src]="item.image" alt="{{ item.name }}">
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ item.name }}</h2>
-      </ion-label>
-      <ion-note slot="end">{{ item.qty }}x</ion-note>
-      
-    </ion-item>
-  </ion-list>
+  <!-- Info Meja (hanya jika reservasi) -->
+    <ion-card *ngIf="orderType === 'reservasi' && selectedMeja">
+      <ion-card-header>
+        <ion-card-title>Informasi Meja Reservasi</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Nama Meja:</strong> {{ selectedMeja.nama_meja }}</p>
+      </ion-card-content>
+    </ion-card>
 
-  <ng-template #noItems>
-    <ion-text color="medium" class="ion-padding">
-      Tidak ada item dalam keranjang.
-    </ion-text>
-  </ng-template>
-
-   <ion-card *ngIf="orderType === 'reservasi'">   <!--pakai untuk reservasi akan muncul -->
-  <ion-card-header>
-    <ion-card-title>Data Reservasi</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-
-    <!-- Nama -->
-    <ion-input class="custom-input" [(ngModel)]="reservationData.name" placeholder="Nama Lengkap"></ion-input>
-
-    <!-- Nomor HP -->
-    <ion-input class="custom-input" type="tel" [(ngModel)]="reservationData.phone" placeholder="Nomor HP"></ion-input>
-
-    <!-- Tanggal dan Jam -->
-     <ion-datetime-button datetime="datetime"></ion-datetime-button>
-
-<ion-modal [keepContentsMounted]="true">
-  <ng-template>
-    <ion-datetime [showDefaultButtons]="true" id="datetime" [(ngModel)]="reservationData.tanggalDanJam"></ion-datetime>
-  </ng-template>
-</ion-modal>
-    <!-- Jumlah Orang -->
-    <ion-item>
-      <ion-label>Jumlah Orang</ion-label>
-      <ion-select [(ngModel)]="reservationData.peopleCount">
-        <ion-select-option *ngFor="let n of [2,3,4,5,6,7,8,9,10]" [value]="n">{{ n }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <!-- Lokasi Meja -->
-    <div class="custom-section">
-      <div class="section-title">Lokasi Meja</div>
-      <div class="radio-row">
-        <label>
-          <input type="radio" name="tableLocation" value="dalam" [(ngModel)]="reservationData.tableLocation" />
-          Di Dalam
-        </label>
-        <label>
-          <input type="radio" name="tableLocation" value="luar" [(ngModel)]="reservationData.tableLocation" />
-          Di Luar
-        </label>
-      </div>
-    </div>
-
-    <!-- Status Meja -->
-    <div class="custom-section">
-      <div class="section-title">Status Meja</div>
-      <div class="radio-row">
-        <label>
-          <input type="radio" name="tableStatus" value="tersedia" [(ngModel)]="reservationData.tableStatus" />
-          Tersedia
-        </label>
-        <label>
-          <input type="radio" name="tableStatus" value="tidak tersedia" [(ngModel)]="reservationData.tableStatus" />
-          Tidak Tersedia
-        </label>
-      </div>
-    </div>
-
-  </ion-card-content>
-</ion-card>
-
-
-
-<!-- PAYMENT DETAIL CARD -->
-<div style="margin: 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 16px; background: white;">
-  <h4 style="font-weight: bold; margin-bottom: 12px;">PAYMENT DETAIL</h4>
-
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <div style="display: flex; align-items: center;">
-      <ion-icon name="card-outline" style="font-size: 20px; margin-right: 8px;"></ion-icon>
-      <span style="font-weight: 500;">{{ selectedPaymentMethod || 'select payment method' }}</span>
-    </div>
-    <a (click)="openPaymentOptions()" style="color: #000; font-weight: 500;">SELECT</a>
-  </div>
-
-  <hr style="margin: 12px 0;">
-
-  <div style="font-size: 14px; color: #888;">Payment Method</div>
-  <div style="font-weight: bold;">{{ selectedPaymentMethod || '-' }}</div>
-</div>
-
-
-<!-- Action Sheet untuk memilih metode -->
-<ion-action-sheet
-  [isOpen]="showPaymentOptions"
-  header="Select Payment Method"
-  (didDismiss)="showPaymentOptions = false"
-  [buttons]="paymentOptions">
-</ion-action-sheet>
-
-
-
-
-
-  <!-- ORDER SUMMARY -->
-  <div style="margin-top: 24px;">
-    <ion-text color="medium"><strong>ORDER SUMMARY</strong></ion-text>
-    <ion-list>
-      <ion-item *ngFor="let item of items">
-        <ion-label>{{ item.name }}</ion-label>
-        <ion-note slot="end">Rp {{ item.price * item.qty }}</ion-note>
-      </ion-item>
-      <ion-item lines="full">
-        <ion-label><strong>TOTAL</strong></ion-label>
-        <ion-note slot="end"><strong>Rp {{ getTotal() }}</strong></ion-note>
+    <!-- ORDER ITEMS -->
+    <ion-text color="medium"><strong>ORDER ITEMS</strong></ion-text>
+    <ion-list *ngIf="cartList.length > 0; else noItems">
+      <ion-item *ngFor="let item of cartList">
+        <ion-avatar slot="start">
+          <img [src]="item.menu.gambar_menu" alt="{{ item.menu.nama_menu }}">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ item.menu.nama_menu }}</h2>
+        </ion-label>
+        <ion-note slot="end">{{ item.jumlah }}x</ion-note>
+        
       </ion-item>
     </ion-list>
-  </div>
 
-<ion-button expand="block" color="success" class="ion-margin-top" (click)="submitOrder()">
-  Order Now
-</ion-button>
+    <ng-template #noItems>
+      <ion-text color="medium" class="ion-padding">
+        Tidak ada item dalam keranjang.
+      </ion-text>
+    </ng-template>
 
+    <ion-card *ngIf="orderType === 'reservasi'">   <!--pakai untuk reservasi akan muncul -->
+      <ion-card-header>
+        <ion-card-title>Data Reservasi</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Tanggal dan Jam -->
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime [showDefaultButtons]="true" id="datetime" [(ngModel)]="tanggalDanJam"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-card-content>
+    </ion-card>
 
+    <!-- PAYMENT DETAIL CARD -->
+    <div style="margin: 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 16px; background: white;">
+      <h4 style="font-weight: bold; margin-bottom: 12px;">PAYMENT DETAIL</h4>
 
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center;">
+          <ion-icon name="card-outline" style="font-size: 20px; margin-right: 8px;"></ion-icon>
+          <span style="font-weight: 500;">{{ selectedPaymentMethod || 'select payment method' }}</span>
+        </div>
+        <a (click)="openPaymentOptions()" style="color: #000; font-weight: 500;">SELECT</a>
+      </div>
+
+      <hr style="margin: 12px 0;">
+
+      <div style="font-size: 14px; color: #888;">Payment Method</div>
+      <div style="font-weight: bold;">{{ selectedPaymentMethod || '-' }}</div>
+    </div>
+
+    <!-- Action Sheet untuk memilih metode -->
+    <ion-action-sheet
+      [isOpen]="showPaymentOptions"
+      header="Select Payment Method"
+      (didDismiss)="showPaymentOptions = false"
+      [buttons]="paymentOptions">
+    </ion-action-sheet>
+
+    <!-- ORDER SUMMARY -->
+    <div style="margin-top: 24px;">
+      <ion-text color="medium"><strong>ORDER SUMMARY</strong></ion-text>
+      <ion-list>
+        <ion-item *ngFor="let item of cartList">
+          <ion-label>{{ item.menu.nama_menu }}</ion-label>
+          <ion-note slot="end">Rp {{ item.menu.harga_menu * item.jumlah }}</ion-note>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label><strong>TOTAL</strong></ion-label>
+          <ion-note slot="end"><strong>Rp {{ totalPrice }}</strong></ion-note>
+        </ion-item>
+      </ion-list>
+    </div>
+
+  <ion-button expand="block" color="success" class="ion-margin-top" (click)="submitOrder()">
+    Order Now
+  </ion-button>
 </ion-content>
 
 <ion-footer>

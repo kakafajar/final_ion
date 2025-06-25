@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { TransaksiService } from '../service/transaksi.service';
 
 @Component({
   standalone: false,
@@ -6,13 +7,24 @@ import { Component } from '@angular/core';
   templateUrl: './order.page.html',
   styleUrls: ['./order.page.scss'],
 })
-export class OrderPage {
-  orders: any[] = [];
+export class OrderPage implements OnInit {
+  transaksis: any[] = [];
   expandedIndex: number | null = null;
 
-  ionViewWillEnter() {
-    const storedOrders = localStorage.getItem('allOrders');
-    this.orders = storedOrders ? JSON.parse(storedOrders) : [];
+  constructor(
+    private ngZone:NgZone,
+
+    private transaksiService:TransaksiService
+  ){}
+
+  ngOnInit(): void {
+    this.ngZone.run(()=>{
+      this.transaksiService.whereUserId(localStorage.getItem('user_id'))
+      .subscribe(response=>{
+
+        this.transaksis.push(...response.data);
+      });
+    });
   }
 
   toggleDetails(index: number) {
@@ -28,8 +40,4 @@ export class OrderPage {
     }
   }
 
-  clearOrders() {
-    localStorage.removeItem('allOrders');
-    this.orders = [];
-  }
 }

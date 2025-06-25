@@ -1,8 +1,20 @@
-import { Component } from '@angular/core';
-import { CartService } from '../service/cart.service';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { ActionSheetButton, NavController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { MenuService } from '../service/menu.service';
+import { OrderService } from '../service/order.service';
+import { OrderDetailService } from '../service/order-detail.service';
+import { SingletonService } from '../service/singleton.service';
+import { ReservasiService } from '../service/reservasi.service';
+import { TransaksiService } from '../service/transaksi.service';
+import { lastValueFrom } from 'rxjs';
+
+
+interface cartItem{
+  menu:any,
+  jumlah:number
+}
 
 @Component({
   standalone: false,
@@ -10,45 +22,55 @@ import { Router } from '@angular/router';
   templateUrl: './order-detail.page.html',
   styleUrls: ['./order-detail.page.scss'],
 })
-export class OrderDetailPage {
+export class OrderDetailPage implements OnInit{
   items: any[] = [];
   orderType: string = '';
   selectedPaymentMethod: string = '';
   showPaymentOptions: boolean = false;
-  selectedTable: any = null;
-
   
+  selectedMeja: any = null;
+  cartList:cartItem[] =[]
+  totalPrice:number=0;
 
-
-  reservationData = {
-    name: '',
-    phone: '',
-    peopleCount: 2,
-    tanggalDanJam:new Date().toISOString(),
-    tableLocation: '',
-    tableStatus: ''
-  };
-
+  tanggalDanJam:string=new Date().toISOString();
   datetime : string = new Date().toISOString();
 
   constructor(
-    private cartService: CartService,
     private navCtrl: NavController,
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute,
+    private ngZone:NgZone,
+
+    private menuService:MenuService,
+    private orderService:OrderService,
+    private orderDetailService:OrderDetailService,
+    private reservasiService:ReservasiService,
+    private transaksiService:TransaksiService,
+    private singletonService:SingletonService
   ) {
-    const nav = this.router.getCurrentNavigation();
-    this.selectedTable = nav?.extras?.state?.['selectedTable'] || JSON.parse(localStorage.getItem('selectedTable') || 'null');
-
-    console.log(cartService.getCartItems());
   }
 
-  ionViewWillEnter() {
-    this.items = this.cartService.getCartItems();
-    this.orderType = this.cartService.getOrderType();
-  }
-
-  getTotal() {
-    return this.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  ngOnInit(): void {
+    this.ngZone.run(()=>{
+      this.orderType = this.singletonService.temps["orderType"];
+      this.selectedMeja = this.singletonService.temps["selectedMeja"];
+      let cartListIds = this.singletonService.temps["cartListIds"];
+      this.totalPrice = 0;
+      
+      Object.keys(cartListIds).forEach((menuId:any)=>{
+        this.menuService.find(menuId)
+        .subscribe(response=>{
+          this.cartList.push({
+            menu: response.data,
+            jumlah: cartListIds[menuId]
+          });
+          
+          this.totalPrice += response.data.harga_menu * cartListIds[menuId];
+        });
+      });
+      this.singletonService.clearTemps();
+    });
+    
   }
 
   paymentOptions: ActionSheetButton[] = [
@@ -82,56 +104,88 @@ export class OrderDetailPage {
 
   getIcon(type: string): string {
     switch (type) {
-      case 'Take Away': return 'bag-outline';
-      case 'Dine In': return 'restaurant-outline';
-      case 'Reservation': return 'calendar-outline';
+      case 'takeaway': return 'bag-outline';
+      case 'dinein': return 'restaurant-outline';
+      case 'reservasi': return 'calendar-outline';
       default: return 'help-circle-outline';
     }
   }
 
-  // ✅ Simpan Order ke localStorage (untuk riwayat + untuk tampil di Home)
-  saveOrder() {
-  const newOrder = {
-    items: this.items,
-    orderType: this.orderType,
-    paymentMethod: this.selectedPaymentMethod,
-    reservationData: this.orderType === 'reservasi' ? this.reservationData : null,
-    table: this.selectedTable,
-    total: this.getTotal(),
-    timestamp: new Date().toISOString()
-  };
-
-  // Ambil semua pesanan yang sudah ada
-  const allOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
-
-  // Tambahkan pesanan baru
-  allOrders.push(newOrder);
-
-  // Simpan kembali ke localStorage
-  localStorage.setItem('allOrders', JSON.stringify(allOrders));
-
-  console.log('✅ Order saved to allOrders[]', newOrder);
-}
-
-  // ✅ Submit Order
-    submitOrder() {
+// ✅ Submit Order
+  async submitOrder() {
     if (!this.selectedPaymentMethod) {
       alert('Silakan pilih metode pembayaran terlebih dahulu.');
       return;
     }
 
     if (this.orderType === 'reservasi') {
-      const { name, phone, tanggalDanJam } = this.reservationData;
-      if (!name || !phone || !tanggalDanJam) {
+      if (!this.tanggalDanJam) {
         alert('Harap lengkapi data reservasi!');
         return;
       }
     }
 
-    this.saveOrder();
-    this.cartService.clearCart();
-    this.navCtrl.navigateForward('/home');
-  }
+    // create OOOOOrder
+    try{
+      let order:any;
+      const orderRequest$ = this.orderService.create({
+        user_id : localStorage.getItem("user_id"),
+        jenis_order: this.orderType
+      });
+      
+      await lastValueFrom(orderRequest$).then(response=>{
+        order = response.data;
+      });
 
+      // creatine order detail
+      this.cartList.forEach(async item=>{
+        const orderDetail$ = this.orderDetailService.create({
+          order_id : order.id,
+          menu_id : item.menu.id,
+          jumlah : item.jumlah
+        });
+        
+        await lastValueFrom(orderDetail$).catch(error=>{
+          console.log(error);
+        });
+      });
+
+      let transaksi:any;
+      const transaksi$ = this.transaksiService.create({
+        user_id : localStorage.getItem("user_id"),
+        order_id : order.id,
+        metode_pembayaran: this.selectedPaymentMethod,
+        total_harga : this.totalPrice
+      });
+
+      await lastValueFrom(transaksi$).then(response=>{
+        transaksi = response.data;
+      }).catch(error=>{
+        console.log(error);
+      });
+
+      // creat reservasi
+      if (this.orderType === 'reservasi') {
+        const reservasi$ = this.reservasiService.create({
+          user_id : localStorage.getItem("user_id"),
+          meja_id : this.selectedMeja.id,
+          transaksi_id : transaksi.id,
+          tanggal_dan_jam : this.tanggalDanJam.slice(0,-1).split("T").join(" ")
+        });
+        
+        await lastValueFrom(reservasi$).catch(error=>{
+          console.log(error);
+        });
+      }
+
+      this.navCtrl.navigateForward('/home');
+    }
+    catch(error){
+      alert(error);
+      console.log(error);
+      
+    }
+
+  }
 
 }

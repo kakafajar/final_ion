@@ -49,8 +49,7 @@ export class LoginPage {
   .subscribe(async data=>{
     if(data.success){
       localStorage.setItem("token", data.data.token);
-      localStorage.setItem("user_id", data.data.id);
-      localStorage.setItem('username', data.data.username);
+      this.authService.refreshUserInStorage(data.data.user);
 
       const toast = await this.toastController.create({
         message: 'Login berhasil!',
@@ -82,3 +81,4 @@ togglePassword() {
     this.navCtrl.navigateForward('/register');
   }
 }
+

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, single } from 'rxjs';
 import { SingletonService } from './singleton.service';
 
 @Injectable({
@@ -33,6 +33,15 @@ export class AuthService {
   {
     return this.http.post(this.singleton.apiUrl+"/api/logout",{}, {
       headers : this.singleton.get_header()});
+  }
+
+  checkUser(username:string|any, password:string|any)
+  {
+    return this.http.post(this.singleton.apiUrl+"/api/check_user",
+      {
+        username : username,
+        password : password
+      }, {headers:this.singleton.get_header()});
   }
 
   refreshUserInStorage(newUserData:string|object|any)

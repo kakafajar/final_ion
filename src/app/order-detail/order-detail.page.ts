@@ -3,6 +3,7 @@ import { CartService } from '../service/cart.service';
 import { ActionSheetButton, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
+declare var QRCode: any; // ← supaya TypeScript tidak error
 
 @Component({
   standalone: false,
@@ -16,6 +17,8 @@ export class OrderDetailPage {
   selectedPaymentMethod: string = '';
   showPaymentOptions: boolean = false;
   selectedTable: any = null;
+
+
 
   
 
@@ -115,23 +118,24 @@ export class OrderDetailPage {
 
   // ✅ Submit Order
     submitOrder() {
-    if (!this.selectedPaymentMethod) {
-      alert('Silakan pilih metode pembayaran terlebih dahulu.');
+  if (!this.selectedPaymentMethod) {
+    alert('Silakan pilih metode pembayaran terlebih dahulu.');
+    return;
+  }
+
+  if (this.orderType === 'reservasi') {
+    const { name, phone, tanggalDanJam } = this.reservationData;
+    if (!name || !phone || !tanggalDanJam) {
+      alert('Harap lengkapi data reservasi!');
       return;
     }
-
-    if (this.orderType === 'reservasi') {
-      const { name, phone, tanggalDanJam } = this.reservationData;
-      if (!name || !phone || !tanggalDanJam) {
-        alert('Harap lengkapi data reservasi!');
-        return;
-      }
-    }
-
-    this.saveOrder();
-    this.cartService.clearCart();
-    this.navCtrl.navigateForward('/home');
   }
+
+  this.saveOrder();
+  this.cartService.clearCart();
+  this.navCtrl.navigateForward('/home');
+}
+
 
 
 }

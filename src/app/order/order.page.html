@@ -45,7 +45,9 @@
           <p>Telepon: {{ order.reservationData.phone }}</p>
           <p>Tanggal: {{ order.reservationData.tanggalDanJam }}</p>
           <p>Jumlah Orang: {{ order.reservationData.peopleCount }}</p>
-          <p>Lokasi Meja: {{ order.reservationData.tableLocation }}</p>
+          <p *ngIf="order.table?.nama">Meja Dipilih: {{ order.table.nama }}</p> <!-- ✅ Tambahkan ini -->
+          
+          <div [id]="'qrcode-' + i" style="margin-top: 16px;"></div>
         </ion-card-content>
       </ion-card>
 

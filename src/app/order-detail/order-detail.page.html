@@ -74,35 +74,6 @@
       </ion-select>
     </ion-item>
 
-    <!-- Lokasi Meja -->
-    <div class="custom-section">
-      <div class="section-title">Lokasi Meja</div>
-      <div class="radio-row">
-        <label>
-          <input type="radio" name="tableLocation" value="dalam" [(ngModel)]="reservationData.tableLocation" />
-          Di Dalam
-        </label>
-        <label>
-          <input type="radio" name="tableLocation" value="luar" [(ngModel)]="reservationData.tableLocation" />
-          Di Luar
-        </label>
-      </div>
-    </div>
-
-    <!-- Status Meja -->
-    <div class="custom-section">
-      <div class="section-title">Status Meja</div>
-      <div class="radio-row">
-        <label>
-          <input type="radio" name="tableStatus" value="tersedia" [(ngModel)]="reservationData.tableStatus" />
-          Tersedia
-        </label>
-        <label>
-          <input type="radio" name="tableStatus" value="tidak tersedia" [(ngModel)]="reservationData.tableStatus" />
-          Tidak Tersedia
-        </label>
-      </div>
-    </div>
 
   </ion-card-content>
 </ion-card>
@@ -163,6 +134,8 @@
 
 
 </ion-content>
+
+
 
 <ion-footer>
   <ion-tab-bar slot="bottom">

@@ -9,10 +9,14 @@
       <ion-card-content>
         <ion-list>
           <ion-radio-group [(ngModel)]="mejaDipilih">
-            <ion-item *ngFor="let meja of mejaList">
-              <ion-label>{{ meja.nama }}</ion-label>
-              <ion-radio slot="end" [value]="meja"></ion-radio>
-            </ion-item>
+              <ion-item *ngFor="let meja of mejaList">
+                <ion-label>
+                  {{ meja.nama }}
+                  <ion-text color="medium" *ngIf="meja.status === 'dipesan'"> - Dipesan</ion-text>
+                  <ion-text color="success" *ngIf="meja.status === 'tersedia'"> - Tersedia</ion-text>
+                </ion-label>
+                <ion-radio slot="end" [value]="meja" [disabled]="meja.status === 'dipesan'"></ion-radio>
+              </ion-item>
           </ion-radio-group>
         </ion-list>
         <ion-button expand="block" color="primary" (click)="konfirmasiPilihMeja()" [disabled]="!mejaDipilih">

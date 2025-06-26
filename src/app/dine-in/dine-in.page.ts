@@ -25,11 +25,15 @@ export class DineInPage implements OnInit, OnDestroy {
   selectedTable: any = null;
   mejaDipilih: any = null;
 
-  mejaList = [
-    { id: 1, nama: 'Meja 1' },
-    { id: 2, nama: 'Meja 2' },
-    { id: 3, nama: 'Meja 3' }
-  ];
+mejaList = [
+  { id: 1, nama: 'Meja 1', status: 'tersedia' },
+  { id: 2, nama: 'Meja 2', status: 'tersedia' },
+  { id: 3, nama: 'Meja 3', status: 'tersedia' },
+  { id: 4, nama: 'Meja 4', status: 'tersedia' },
+  { id: 5, nama: 'Meja 5', status: 'tersedia' },
+  { id: 6, nama: 'Meja 6', status: 'tersedia' }
+];
+
 
   constructor(
     private modalController: ModalController,
@@ -111,10 +115,18 @@ export class DineInPage implements OnInit, OnDestroy {
     }
   }
 
-  konfirmasiPilihMeja() {
-    this.selectedTable = this.mejaDipilih;
-    localStorage.setItem('selectedTable', JSON.stringify(this.selectedTable));
-  }
+konfirmasiPilihMeja() {
+  this.selectedTable = this.mejaDipilih;
+
+  // Tandai status meja yang dipilih sebagai "dipesan"
+  this.mejaList = this.mejaList.map(meja => ({
+    ...meja,
+    status: meja.id === this.mejaDipilih.id ? 'dipesan' : meja.status
+  }));
+
+  localStorage.setItem('selectedTable', JSON.stringify(this.selectedTable));
+}
+
 
   resetItemCounts() {
     this.items.forEach(item => {

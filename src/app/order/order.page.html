@@ -45,6 +45,8 @@
           <p>Meja: {{ transaksi.reservasi.meja.nama_meja }} </p>
           <p>Tanggal dan Jam: {{ transaksi.reservasi.tanggal_dan_jam}} </p>
           <p>Status Reservasi: {{transaksi.reservasi.status_reservasi}} </p>
+        
+          <div [id]="'qrcode-' + i" style="margin-top: 16px;"></div>
         </ion-card-content>
       </ion-card>
 

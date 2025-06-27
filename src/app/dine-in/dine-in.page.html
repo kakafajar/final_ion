@@ -10,8 +10,12 @@
         <ion-radio-group [(ngModel)]="selectedMeja">
           <ion-list >
               <ion-item *ngFor="let meja of mejaList">
-                <ion-label>{{ meja.nama_meja }}</ion-label>
-                <ion-radio slot="end" [value]="meja"></ion-radio>
+                <ion-label>
+                  {{ meja.nama_meja }}
+                  <ion-text color="medium" *ngIf="meja.status_meja === 'terisi'"> - Dipesan</ion-text>
+                  <ion-text color="success" *ngIf="meja.status_meja === 'tersedia'"> - Tersedia</ion-text>
+                </ion-label>
+                <ion-radio slot="end" [value]="meja" [disabled]="meja.status_meja === 'terisi'"></ion-radio>
               </ion-item>
           </ion-list>
         </ion-radio-group>

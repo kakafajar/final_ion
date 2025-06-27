@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { ActionSheetButton, NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
+declare var QRCode: any; // ← supaya TypeScript tidak error
 import { MenuService } from '../service/menu.service';
 import { OrderService } from '../service/order.service';
 import { OrderDetailService } from '../service/order-detail.service';
@@ -110,7 +111,6 @@ export class OrderDetailPage implements OnInit{
       default: return 'help-circle-outline';
     }
   }
-
 // ✅ Submit Order
   async submitOrder() {
     if (!this.selectedPaymentMethod) {
@@ -132,7 +132,7 @@ export class OrderDetailPage implements OnInit{
         user_id : localStorage.getItem("user_id"),
         jenis_order: this.orderType
       });
-      
+
       await lastValueFrom(orderRequest$).then(response=>{
         order = response.data;
       });
@@ -144,7 +144,7 @@ export class OrderDetailPage implements OnInit{
           menu_id : item.menu.id,
           jumlah : item.jumlah
         });
-        
+
         await lastValueFrom(orderDetail$).catch(error=>{
           console.log(error);
         });
@@ -172,7 +172,7 @@ export class OrderDetailPage implements OnInit{
           transaksi_id : transaksi.id,
           tanggal_dan_jam : this.tanggalDanJam.slice(0,-1).split("T").join(" ")
         });
-        
+
         await lastValueFrom(reservasi$).catch(error=>{
           console.log(error);
         });
@@ -183,7 +183,7 @@ export class OrderDetailPage implements OnInit{
     catch(error){
       alert(error);
       console.log(error);
-      
+
     }
 
   }

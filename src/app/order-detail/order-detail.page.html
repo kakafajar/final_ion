@@ -13,7 +13,6 @@
       </div>
     </ion-card-content>
   </ion-card>
-
   <!-- Info Meja (hanya jika reservasi) -->
     <ion-card *ngIf="orderType === 'reservasi' && selectedMeja">
       <ion-card-header>
@@ -35,7 +34,6 @@
           <h2>{{ item.menu.nama_menu }}</h2>
         </ion-label>
         <ion-note slot="end">{{ item.jumlah }}x</ion-note>
-        
       </ion-item>
     </ion-list>
 
@@ -106,6 +104,8 @@
     Order Now
   </ion-button>
 </ion-content>
+
+
 
 <ion-footer>
   <ion-tab-bar slot="bottom">

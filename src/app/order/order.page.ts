@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { TransaksiService } from '../service/transaksi.service';
 
 declare var QRCode: any;
 
@@ -8,67 +9,44 @@ declare var QRCode: any;
   templateUrl: './order.page.html',
   styleUrls: ['./order.page.scss'],
 })
-export class OrderPage {
-  orders: any[] = [];
+export class OrderPage implements OnInit {
+  transaksis: any[] = [];
   expandedIndex: number | null = null;
 
-  ionViewWillEnter() {
-    const storedOrders = localStorage.getItem('allOrders');
-    this.orders = storedOrders ? JSON.parse(storedOrders) : [];
+  constructor(
+    private ngZone:NgZone,
 
-    setTimeout(() => {
-      this.orders.forEach((order, index) => {
-        if (order.orderType === 'reservasi') {
+    private transaksiService:TransaksiService
+  ){}
+
+  ngOnInit(): void {
+    this.ngZone.run(()=>{
+      this.transaksiService.whereUserId(localStorage.getItem('user_id'))
+      .subscribe(response=>{
+
+        this.transaksis.push(...response.data);
+      });
+      
+      this.transaksis.forEach((transaksi, index)=>{
+        if (transaksi.order.jenis_order === 'reservasi') {
           const targetDivId = 'qrcode-' + index;
           const el = document.getElementById(targetDivId);
           if (el) {
             el.innerHTML = ''; // Bersihkan QR sebelumnya jika ada
             new QRCode(el, {
-              text: JSON.stringify({
-                name: order.reservationData.name,
-                phone: order.reservationData.phone,
-                meja: order.table?.nama || '-',
-                jumlahOrang: order.reservationData.peopleCount,
-                tanggal: order.reservationData.tanggalDanJam,
-                total: order.total
-              }),
+              text: transaksi.kode_transaksi,
               width: 200,
               height: 200
             });
           }
         }
       });
-    }, 300); // waktu render konten
+    });
   }
 
   toggleDetails(index: number) {
-  this.expandedIndex = this.expandedIndex === index ? null : index;
-
-  // Generate QR hanya jika tipe reservasi
-  if (this.expandedIndex !== null) {
-    const order = this.orders[this.expandedIndex];
-    if (order.orderType === 'reservasi') {
-      setTimeout(() => {
-        const el = document.getElementById('qrcode-' + this.expandedIndex);
-        if (el) {
-          el.innerHTML = '';
-          new QRCode(el, {
-            text: JSON.stringify({
-              name: order.reservationData.name,
-              phone: order.reservationData.phone,
-              meja: order.table?.nama || '-',
-              jumlahOrang: order.reservationData.peopleCount,
-              tanggal: order.reservationData.tanggalDanJam,
-              total: order.total
-            }),
-            width: 200,
-            height: 200
-          });
-        }
-      }, 100); // delay agar div qrcode sudah render
-    }
+    this.expandedIndex = this.expandedIndex === index ? null : index;
   }
-}
 
 
   getIcon(type: string): string {
@@ -80,8 +58,4 @@ export class OrderPage {
     }
   }
 
-  clearOrders() {
-    localStorage.removeItem('allOrders');
-    this.orders = [];
-  }
 }

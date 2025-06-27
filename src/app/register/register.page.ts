@@ -49,28 +49,29 @@ if (!phoneRegex.test(this.phone)) {
 }
 
 
-  const success = this.authService.register({
-    username: this.username,
-    email: this.email,
-    phone: this.phone,
-    password: this.password,
+  this.authService.register(this.username,
+    this.email,
+    this.phone,
+    this.password
+  )
+  .subscribe(async data=>{
+    if (data.success){
+      this.navCtrl.navigateForward('/login');
+      const toast = await this.toastController.create({
+        message: data.message,
+        duration: 2000,
+        color:'success',
+      });
+      await toast.present();
+    }
+  }, async error=>{
+    const toast = await this.toastController.create({
+      message: error.message,
+      duration: 2000,
+      color:'danger',
+    });
+    await toast.present();
   });
-
-  const toast = await this.toastController.create({
-    message: success ? 'Registrasi berhasil!' : 'Email atau No HP sudah digunakan.',
-    duration: 2000,
-    color: success ? 'success' : 'danger',
-  });
-  await toast.present();
-
-  if (success) {
-    localStorage.setItem('userData', JSON.stringify({
-      username: this.username,
-      email: this.email
-    }));
-
-    this.navCtrl.navigateForward('/login');
-  }
 }
 
 togglePassword() {

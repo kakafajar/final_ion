@@ -5,6 +5,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular'; // Atau impor komponen Ionic individual
 
+import { ToastController } from '@ionic/angular';
+
+import { UserService } from '../service/user.service';
+import { AuthService } from '../service/auth.service';
+
 @Component({
   selector: 'app-profil',
   templateUrl: './profil.page.html',
@@ -18,18 +23,20 @@ import { IonicModule } from '@ionic/angular'; // Atau impor komponen Ionic indiv
   ]
 })
 export class ProfilPage implements OnInit {
-  username: string = 'Guest';
-  email: string = '';
+  user :any;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router, 
 
-ngOnInit() {
-    const savedUser = localStorage.getItem('loggedInUser');
-    if (savedUser) {
-      const user = JSON.parse(savedUser);
-      this.username = user.username;
-      this.email = user.email;
-    }
+    private toastController:ToastController,
+    
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit() {
+    const RawUser :any= localStorage.getItem('user')
+    this.user = JSON.parse(RawUser);
   }
 
   goToEditProfile() {
@@ -49,7 +56,16 @@ ngOnInit() {
   }
 
   logout() {
-    localStorage.removeItem('userData');
-    this.router.navigate(['/login']);
+    this.authService.logout()
+    .subscribe(data=>{
+      localStorage.clear();
+      this.router.navigateByUrl('/login', { replaceUrl: true });
+    }, async error=>{
+      const toast = await this.toastController.create({
+        message: error.message,
+        duration: 2000,
+        color: 'warning',
+      });
+    });
   }
 }

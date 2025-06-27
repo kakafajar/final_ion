@@ -1,10 +1,13 @@
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
-import { ModalController, Platform, AlertController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
-import { CartService } from '../service/cart.service';
-import { MENU_ITEMS } from 'src/app/data/menu';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
+
+import { MejaService } from '../service/meja.service';
+import { KategoriService } from '../service/kategori.service';
+import { MenuService } from '../service/menu.service';
+import { canDeactivateComponent } from '../service/can-deactivate-guard.service';
+import { SingletonService } from '../service/singleton.service';
 
 @Component({
   standalone: false,
@@ -12,134 +15,72 @@ import { Location } from '@angular/common';
   templateUrl: './dine-in.page.html',
   styleUrls: ['./dine-in.page.scss']
 })
-export class DineInPage implements OnInit, OnDestroy {
-  selectedCategory: string = '';
-  totalCount = 0;
-  cartItems: any[] = [];
+export class DineInPage implements OnInit, canDeactivateComponent {
   orderType: string = '';
-  isActive = true;
-
-
-  items = MENU_ITEMS;
-  filteredItems: any[] = [];
-  selectedTable: any = null;
-  mejaDipilih: any = null;
-
-mejaList = [
-  { id: 1, nama: 'Meja 1', status: 'tersedia' },
-  { id: 2, nama: 'Meja 2', status: 'tersedia' },
-  { id: 3, nama: 'Meja 3', status: 'tersedia' },
-  { id: 4, nama: 'Meja 4', status: 'tersedia' },
-  { id: 5, nama: 'Meja 5', status: 'tersedia' },
-  { id: 6, nama: 'Meja 6', status: 'tersedia' }
-];
-
-
+  
   constructor(
-    private modalController: ModalController,
-    private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
-    private alertController: AlertController,
-    private platform: Platform,
     private ngZone: NgZone,
-    private location: Location
+    
+    private modalController: ModalController,
+    private alertController: AlertController,
+    
+    private singletonService :SingletonService,
+    private mejaService : MejaService,
+    private kategoriService : KategoriService,
+    private menuService : MenuService,
   ) {
     let tipe: any = route.snapshot.paramMap.get('tipe');
     this.orderType = tipe ? tipe : 'dinein';
   }
 
-  ngOnDestroy() {
-  this.isActive = false;
-}
-
-
   ngOnInit() {
-    const table = localStorage.getItem('selectedTable');
+    const table = localStorage.getItem('selectedMeja');
     if (table) {
-      this.selectedTable = JSON.parse(table);
+      this.selectedMeja = JSON.parse(table);
     }
 
-    this.cartService.clearCart();
-    this.cartService.setOrderType(this.orderType);
-    this.filterItemsByCategory();
-    this.resetItemCounts();
-    this.cartItems = this.cartService.getCartItems();
-    this.filteredItems = this.items;
-    this.items.forEach(item => {
-      const cartItem = this.cartService.getCartItems().find(ci => ci.id === item.id);
-      item.count = cartItem?.qty ?? 0;
-    });
+    // collecting :) dataSS from the dat'a bASSe
+    this.ngZone.run(()=>{
+      // get all of dem tables
+      this.mejaService.all()
+      .subscribe(response=>{
+        let datas = response.data;
+        
+        this.mejaList.push(...datas);
+      });
+      // categories for days
+      this.kategoriService.all()
+      .subscribe(response=>{
+        let datas = response.data;
 
-    // Tombol back Android
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.handleBackNavigation();
-    });
+        this.kategoriList.push(...datas);
+      });
+      // menus too
+      this.menuService.all()
+      .subscribe(response=>{
+        let datas = response.data;
 
-    // Tombol back browser
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart && event.restoredState) {
-        this.handleBackNavigation();
-      }
-    });
+        this.menuList.push(...datas);
+      });
+    })
   }
-
-  handleBackNavigation() {
-    if (!this.isActive) return;
-
-    if (this.orderType === 'reservasi' && this.selectedTable) {
-      this.alertController.create({
-        header: 'Kembali ke Pilih Meja?',
-        message: 'Apakah Anda ingin memilih meja lain?',
-        buttons: [
-          {
-            text: 'Ya',
-            handler: () => {
-              this.ngZone.run(() => {
-                this.selectedTable = null;
-                localStorage.removeItem('selectedTable');
-              });
-            }
-          },
-          {
-            text: 'Tidak',
-            role: 'cancel',
-            handler: () => {
-              this.location.back();
-            }
-          }
-        ]
-      }).then(alert => alert.present());
-    } else {
-      this.location.back();
-    }
-  }
-
-konfirmasiPilihMeja() {
-  this.selectedTable = this.mejaDipilih;
-
-  // Tandai status meja yang dipilih sebagai "dipesan"
-  this.mejaList = this.mejaList.map(meja => ({
-    ...meja,
-    status: meja.id === this.mejaDipilih.id ? 'dipesan' : meja.status
-  }));
-
-  localStorage.setItem('selectedTable', JSON.stringify(this.selectedTable));
-}
-
-
-  resetItemCounts() {
-    this.items.forEach(item => {
-      item.count = 0;
-    });
-    this.updateTotalCount();
+  
+  konfirmasiPilihMeja() {
+    localStorage.setItem('selectedMeja', JSON.stringify(this.selectedMeja));
+    this.hasUnsavedTasks = true;
   }
 
   filterItems(event: any) {
-    const searchTerm = event.target.value?.toLowerCase() || '';
-    this.filteredItems = this.items.filter(item =>
-      item.name.toLowerCase().includes(searchTerm)
-    );
+    this.searchTerm = event.target.value?.toLowerCase() || '';
+    this.cartFilteredIds = [];
+    this.menuList.forEach((menu)=>{
+      if(menu.nama_menu.toLowerCase().includes(this.searchTerm)){
+        this.cartFilteredIds.push(menu.id);
+        
+      }
+    });
   }
 
   onCategoryChange(event: any) {
@@ -150,47 +91,30 @@ konfirmasiPilihMeja() {
     }
   }
 
-  filterItemsByCategory() {
-    this.filteredItems = this.items.filter(item => item.category === this.selectedCategory);
-  }
-
-  increment(id: number) {
-    const item = this.items.find(i => i.id === id);
-    if (!item) return;
-
-    const existing = this.cartService.getCartItems().find(i => i.id === id);
-
-    if (!existing) {
-      item.count = 1;
-      this.cartService.addItemToCart({ ...item });
-    } else {
-      item.count = existing.qty + 1;
-      this.cartService.addItemToCart({ ...item });
+  increaseToCart(menu_id: string) {
+    if (this.cartList.hasOwnProperty(menu_id)){
+      this.cartList[menu_id] += 1;
+      this.cartTotalCount += 1;
+    }else{
+      this.cartList[menu_id] = 1;
+      this.cartTotalCount = 1;
     }
-
-    this.updateTotalCount();
   }
 
-  decrement(id: number) {
-    const item = this.items.find(i => i.id === id);
-    if (!item || item.count <= 0) return;
-
-    this.cartService.decreaseItemQty(item);
-
-    const updatedItem = this.cartService.getCartItems().find(i => i.id === id);
-    item.count = updatedItem?.qty ?? 0;
-
-    this.updateTotalCount();
-  }
-
-  updateTotalCount() {
-    this.totalCount = this.items.reduce((sum, i) => sum + i.count, 0);
+  decreaseFromCart(menu_id: string) {
+    if (this.cartList[menu_id] > 0){
+      this.cartList[menu_id] -= 1;
+      this.cartTotalCount -= 1;
+    }
   }
 
   async openFoodDetail(item: any) {
     const modal = await this.modalController.create({
       component: FoodDetailComponent,
-      componentProps: { food: item },
+      componentProps: {
+          menu: item,
+          orderPage: this
+        },
       breakpoints: [0, 0.5, 0.9],
       initialBreakpoint: 0.9,
       showBackdrop: true,
@@ -199,9 +123,8 @@ konfirmasiPilihMeja() {
   }
 
   async goToOrderDetail() {
-    const user = localStorage.getItem('loggedInUser');
-
-    if (!user) {
+    this.hasUnsavedTasks=false;
+    if (! localStorage.getItem("username")) {
       const alert = await this.alertController.create({
         header: 'Login Diperlukan',
         message: 'Silakan login atau daftar terlebih dahulu untuk melanjutkan checkout.',
@@ -212,7 +135,6 @@ konfirmasiPilihMeja() {
             handler: () => {
               this.router.navigate(['/login']);
             },
-            cssClass: 'custom-orange'
           },
           {
             text: 'Daftar',
@@ -220,26 +142,63 @@ konfirmasiPilihMeja() {
             handler: () => {
               this.router.navigate(['/register']);
             },
-            cssClass: 'custom-orange'
           },
           {
             text: 'Batal',
             role: 'cancel',
-            cssClass: 'custom-cancel'
+            handler: ()=>{
+              this.hasUnsavedTasks=true;
+            }
           }
         ],
-        cssClass: 'custom-alert'
       });
 
       await alert.present();
       return;
     }
-
-    // Kirim data selectedTable ke order-detail
-  this.router.navigate(['/order-detail'], {
-    state: {
-      selectedTable: this.selectedTable
+    else{
+      this.singletonService.temps = {
+        selectedMeja : this.selectedMeja,
+        cartListIds : this.cartList,
+        orderType : this.orderType
+      }
+      this.router.navigate(['/order-detail']);
+      return;
     }
-  });
+    
   }
+
+  askToConfirm(nextState:RouterStateSnapshot){
+    if (this.orderType === 'reservasi' && this.hasUnsavedTasks) {
+      this.alertController.create({
+        header: 'Kembali ke Pilih Meja?',
+        message: 'Apakah Anda ingin memilih meja lain?',
+        buttons: [
+          {
+            text: 'Ya',
+            handler: () => {
+              this.hasUnsavedTasks = false
+              this.ngZone.run(()=>{
+                this.router.navigateByUrl(nextState.url);
+              })
+            }
+          },
+          {
+            text: 'Tidak',
+            role: 'cancel',
+            handler: () => {
+              return
+            }
+          }
+        ]
+      }).then(alert => alert.present());
+    }
+  }
+
+  onDeactivation(){
+    this.selectedMeja = null;
+    localStorage.removeItem('selectedMeja');
+  }
+
+  
 }

@@ -1,5 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { TransaksiService } from '../service/transaksi.service';
+import { NgForm } from '@angular/forms';
 
 declare var QRCode: any;
 
@@ -12,6 +13,7 @@ declare var QRCode: any;
 export class OrderPage implements OnInit {
   transaksis: any[] = [];
   expandedIndex: number | null = null;
+  file_bukti: {[index:string] : any} = {};
 
   constructor(
     private ngZone:NgZone,
@@ -25,6 +27,8 @@ export class OrderPage implements OnInit {
       .subscribe(response=>{
 
         this.transaksis.push(...response.data);
+        console.log(response);
+        
       });
       
       this.transaksis.forEach((transaksi, index)=>{
@@ -41,6 +45,30 @@ export class OrderPage implements OnInit {
           }
         }
       });
+    });
+  }
+
+  onFileChange(transaksi_id:any, event:any){
+    this.file_bukti[transaksi_id] = event.target.files[0];
+  }
+
+  uploadBuktiPembayaran(transaksi_id:any, f:NgForm){
+    const formData = new FormData();
+    
+    formData.append("bangsat ag", "ajing");
+    formData.append("bukti_pembayaran", this.file_bukti[transaksi_id]);
+    formData.forEach((data, key)=>{
+      console.log(key);
+      console.log(data);
+      
+      
+      
+    });
+
+    this.transaksiService.uploadBukti(transaksi_id, formData)
+    .subscribe(response=>{
+      console.log(response);
+      
     });
   }
 

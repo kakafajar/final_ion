@@ -14,4 +14,15 @@ export class TransaksiService extends ApiService {
         headers:this.singleton.get_header()
       })
     }
+
+    uploadBukti(transaksi_id:any, params:any):Observable<any>
+    {
+      let headers = this.singleton.get_header();
+      headers.append('enctype', 'multipart/form-data');
+      headers.append('Accept', 'application/json');
+      return this.http.put(this.singleton.apiUrl+"/api/transaksis/"+transaksi_id, params, 
+        {
+          headers : headers
+        });
+    }
 }

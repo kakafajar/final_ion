@@ -17,6 +17,17 @@ import { SingletonService } from '../service/singleton.service';
 })
 export class DineInPage implements OnInit, canDeactivateComponent {
   orderType: string = '';
+  hasUnsavedTasks:boolean = false;
+
+  mejaList:any[] = [];
+  kategoriList:any[] =[];
+  menuList:any[] = [];
+  cartList: {[index:string]:any} = {};
+
+  selectedMeja: any = null;
+  searchTerm:string ="";
+  cartTotalCount: number = 0;
+  cartFilteredIds:string[] =[];
   
   constructor(
     private router: Router,

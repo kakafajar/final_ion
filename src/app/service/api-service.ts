@@ -33,9 +33,9 @@ export class ApiService {
     );
   }
 
-  update(id:string|number, params:Object):Observable<any>
+  update(id:string|number, params:any):Observable<any>
   {
-    return this.http.post(this.singleton.apiUrl+"/api/"+this.apiTable+'/'+id, params,
+    return this.http.put(this.singleton.apiUrl+"/api/"+this.apiTable+'/'+id, params,
       {headers:this.singleton.get_header()}
     )
   }

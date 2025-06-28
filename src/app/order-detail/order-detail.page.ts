@@ -78,19 +78,13 @@ export class OrderDetailPage implements OnInit{
     {
       text: 'Cash',
       handler: () => {
-        this.selectedPaymentMethod = 'Cash';
-      }
-    },
-    {
-      text: 'Debit Card',
-      handler: () => {
-        this.selectedPaymentMethod = 'Debit Card';
+        this.selectedPaymentMethod = 'tunai'
       }
     },
     {
       text: 'QRIS',
       handler: () => {
-        this.selectedPaymentMethod = 'QRIS';
+        this.selectedPaymentMethod = 'qris'
       }
     },
     {
@@ -127,9 +121,14 @@ export class OrderDetailPage implements OnInit{
 
     // create OOOOOrder
     try{
+      let meja_id = null;
+      if (this.selectedMeja){
+        meja_id = this.selectedMeja.id
+      }
       let order:any;
       const orderRequest$ = this.orderService.create({
         user_id : localStorage.getItem("user_id"),
+        meja_id : meja_id,
         jenis_order: this.orderType
       });
 
@@ -168,7 +167,6 @@ export class OrderDetailPage implements OnInit{
       if (this.orderType === 'reservasi') {
         const reservasi$ = this.reservasiService.create({
           user_id : localStorage.getItem("user_id"),
-          meja_id : this.selectedMeja.id,
           transaksi_id : transaksi.id,
           tanggal_dan_jam : this.tanggalDanJam.slice(0,-1).split("T").join(" ")
         });

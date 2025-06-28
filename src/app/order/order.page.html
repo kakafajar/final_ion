@@ -20,11 +20,11 @@
       <p>Total: Rp{{ transaksi.total_harga | number:'1.0-0' }}</p>
       <p>Metode Pembayaran: {{ transaksi.metode_pembayaran }}</p>
       <p>Status Pembayaran: {{transaksi.status_pembayaran}} </p>
-      <p *ngIf="expandedIndex !== i" style="color: brown;">Klik untuk lihat detail</p>
+      <!-- <p *ngIf="expandedIndex !== i" style="color: brown;">Klik untuk lihat detail</p> -->
     </ion-card-content>
 
     <!-- Detail hanya jika diperluas -->
-    <ng-container *ngIf="expandedIndex === i">
+    <ng-container >
       <ion-list>
         <ion-item *ngFor="let item of transaksi.order.details">
           <ion-avatar slot="start">
@@ -42,7 +42,7 @@
           <ion-card-title>Data Reservasi</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <p>Meja: {{ transaksi.reservasi.meja.nama_meja }} </p>
+          <p>Meja: {{ transaksi.order.meja.nama_meja }} </p>
           <p>Tanggal dan Jam: {{ transaksi.reservasi.tanggal_dan_jam}} </p>
           <p>Status Reservasi: {{transaksi.reservasi.status_reservasi}} </p>
         
@@ -51,7 +51,19 @@
       </ion-card>
 
       <ion-card-header>
-        <ion-card-title>Bukti Pembayaran</ion-card-title>
+       <ion-card-title>Bukti Pembayaran</ion-card-title>
+        <ion-card-content *ngIf="transaksi.bukti_pembayaran != null; else uploadBukti">
+        <img [src]="transaksi.bukti_pembayaran" alt="Bukti Pembayaran" style="width: 100%; border-radius: 8px;" />
+        </ion-card-content>
+
+        <ng-template #uploadBukti>
+          <ion-card-content>
+            <form #f="ngForm" (ngSubmit)="uploadBuktiPembayaran(transaksi.id, f)">
+              <input type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange(transaksi.id, $event)">
+              <button>Upload</button>
+            </form>
+          </ion-card-content>
+        </ng-template>
       </ion-card-header>
     </ng-container>
   </ion-card>

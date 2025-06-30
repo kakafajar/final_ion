@@ -66,7 +66,7 @@ if (!phoneRegex.test(this.phone)) {
     }
   }, async error=>{
     const toast = await this.toastController.create({
-      message: error.message,
+      message: error.error.data,
       duration: 2000,
       color:'danger',
     });

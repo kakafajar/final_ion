@@ -50,20 +50,24 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card-header>
+      <ion-card-header >
        <ion-card-title>Bukti Pembayaran</ion-card-title>
-        <ion-card-content *ngIf="transaksi.bukti_pembayaran != null; else uploadBukti">
-        <img [src]="transaksi.bukti_pembayaran" alt="Bukti Pembayaran" style="width: 100%; border-radius: 8px;" />
+       
+       <ion-card-content *ngIf="transaksi.status_pembayaran === 'belum'">
+          <form #f="ngForm" (ngSubmit)="uploadBuktiPembayaran(transaksi.id, f)">
+            <input type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange(transaksi.id, $event)">
+            <button>
+              <span *ngIf="transaksi.bukti_pembayaran == null; else editBtn">Upload</span>
+              <ng-template #editBtn>Edit</ng-template>
+            </button>
+          </form>
+        </ion-card-content> 
+
+        <ion-card-content *ngIf="transaksi.bukti_pembayaran != null" >
+          <img *ngIf="expandedIndex === i" [src]="transaksi.bukti_pembayaran" alt="Bukti Pembayaran" style="width: 100%; border-radius: 8px;" />
+          <p [hidden]="expandedIndex === i">Klik untuk melihat bukti pembayaran</p>
         </ion-card-content>
 
-        <ng-template #uploadBukti>
-          <ion-card-content>
-            <form #f="ngForm" (ngSubmit)="uploadBuktiPembayaran(transaksi.id, f)">
-              <input type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange(transaksi.id, $event)">
-              <button>Upload</button>
-            </form>
-          </ion-card-content>
-        </ng-template>
       </ion-card-header>
     </ng-container>
   </ion-card>

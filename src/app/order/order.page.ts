@@ -23,13 +23,7 @@ export class OrderPage implements OnInit {
 
   ngOnInit(): void {
     this.ngZone.run(()=>{
-      this.transaksiService.whereUserId(localStorage.getItem('user_id'))
-      .subscribe(response=>{
-
-        this.transaksis.push(...response.data);
-        console.log(response);
-        
-      });
+      this.loadTransaksis();
       
       this.transaksis.forEach((transaksi, index)=>{
         if (transaksi.order.jenis_order === 'reservasi') {
@@ -48,29 +42,41 @@ export class OrderPage implements OnInit {
     });
   }
 
+  loadTransaksis(){
+    this.transaksiService.whereUserId(localStorage.getItem('user_id'))
+      .subscribe(response=>{
+        response.data.reverse();
+        this.transaksis.push(...response.data);
+    });
+  }
+
   onFileChange(transaksi_id:any, event:any){
     this.file_bukti[transaksi_id] = event.target.files[0];
   }
 
   uploadBuktiPembayaran(transaksi_id:any, f:NgForm){
-    const formData = new FormData();
-    
-    formData.append("bangsat ag", "ajing");
-    formData.append("bukti_pembayaran", this.file_bukti[transaksi_id]);
-    formData.forEach((data, key)=>{
-      console.log(key);
-      console.log(data);
+    if (transaksi_id in this.file_bukti){
+      const formData = new FormData();
       
-      
-      
-    });
-
-    this.transaksiService.uploadBukti(transaksi_id, formData)
-    .subscribe(response=>{
-      console.log(response);
-      
-    });
+      formData.append("bukti_pembayaran", this.file_bukti[transaksi_id]);
+  
+      this.transaksiService.uploadBukti(transaksi_id, formData)
+      .subscribe(response=>{
+        this.file_bukti = [];
+        this.transaksis.forEach((transaksi, index)=>{
+          if (transaksi.id == transaksi_id){
+            this.transaksis[index].bukti_pembayaran = response.data.bukti_pembayaran;
+          }
+        })
+        
+      }, error=>{
+        console.log(error.error.data);
+        
+        alert(error.error.data);
+      });
+    }
   }
+  
 
   toggleDetails(index: number) {
     this.expandedIndex = this.expandedIndex === index ? null : index;

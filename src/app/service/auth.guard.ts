@@ -20,8 +20,10 @@ export class AuthGuard implements CanActivate, CanActivateChild{
     async checkAuth(){
         let result:boolean=false;
         await lastValueFrom(this.authService.checkToken())
-        .then(response=>{
-            result=true;
+        .then((response:any)=>{
+            if (response.data.role == "pembeli"){
+                result=true;
+            }
         }).catch(error=>{result = false});
 
         if (result==false){

@@ -17,6 +17,8 @@ interface cartItem{
   jumlah:number
 }
 
+
+
 @Component({
   standalone: false,
   selector: 'app-order-detail',
@@ -82,7 +84,7 @@ export class OrderDetailPage implements OnInit{
       }
     },
     {
-      text: 'QRIS',
+      text: 'qris',
       handler: () => {
         this.selectedPaymentMethod = 'qris'
       }
@@ -92,6 +94,13 @@ export class OrderDetailPage implements OnInit{
       role: 'cancel'
     }
   ];
+
+paymentDetails: Record<string, string> = {
+  DANA: '0896-1234-5678 (a.n. Fajar)',
+  OVO: '0822-4567-1234 (a.n. Fajar)',
+  GOPAY: '0813-7890-4321 (a.n. Fajar)'
+};
+
 
   openPaymentOptions() {
     this.showPaymentOptions = true;

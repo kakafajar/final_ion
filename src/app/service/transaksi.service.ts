@@ -25,4 +25,11 @@ export class TransaksiService extends ApiService {
           headers : headers
         });
     }
+
+    whereKodeTransaksi(kode: string): Observable<any> {
+    return this.http.get(`${this.singleton.apiUrl}/api/transaksis/kode_transaksi/${kode}`, {
+      headers: this.singleton.get_header()
+    });
+}
+
 }

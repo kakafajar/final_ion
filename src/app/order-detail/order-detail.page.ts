@@ -96,7 +96,7 @@ export class OrderDetailPage implements OnInit{
   ];
 
 paymentDetails: Record<string, string> = {
-  DANA: '0896-1234-5678 (a.n. Fajar)',
+  qris: '0896-1234-5678 (a.n. Fajar)',
   OVO: '0822-4567-1234 (a.n. Fajar)',
   GOPAY: '0813-7890-4321 (a.n. Fajar)'
 };

@@ -15,7 +15,7 @@ import { SingletonService } from '../service/singleton.service';
   templateUrl: './dine-in.page.html',
   styleUrls: ['./dine-in.page.scss']
 })
-export class DineInPage implements OnInit, canDeactivateComponent {
+export class DineInPage implements canDeactivateComponent {
   orderType: string = '';
   hasUnsavedTasks:boolean = false;
 
@@ -46,7 +46,10 @@ export class DineInPage implements OnInit, canDeactivateComponent {
     this.orderType = tipe ? tipe : 'dinein';
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.cartList = {};
+    this.cartTotalCount = 0;
+    this.cartFilteredIds = [];
     const table = localStorage.getItem('selectedMeja');
     if (table) {
       this.selectedMeja = JSON.parse(table);

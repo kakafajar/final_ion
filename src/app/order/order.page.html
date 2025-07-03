@@ -11,6 +11,7 @@
   <ion-card *ngFor="let transaksi of transaksis; let i = index" (click)="toggleDetails(i)">
     <ion-card-header>
       <ion-card-subtitle>{{ transaksi.created_at | date:'short' }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ transaksi.kode_transaksi }}</ion-card-subtitle>
       <ion-card-title>
         <ion-icon [name]="getIcon(transaksi.order.jenis_order)" style="margin-right: 8px;"></ion-icon>
         {{ transaksi.order.jenis_order }}

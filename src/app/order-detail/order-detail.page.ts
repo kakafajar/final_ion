@@ -185,7 +185,7 @@ paymentDetails: Record<string, string> = {
         });
       }
 
-      this.navCtrl.navigateForward('/home');
+      this.navCtrl.navigateForward('/order');
     }
     catch(error){
       alert(error);

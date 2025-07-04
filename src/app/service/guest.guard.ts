@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate, CanActivateChild{
+export class GuestGuard implements CanActivate, CanActivateChild{
     constructor(private authService: AuthService, private router: Router) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
@@ -21,14 +21,12 @@ export class AuthGuard implements CanActivate, CanActivateChild{
         let result:boolean=false;
         await lastValueFrom(this.authService.checkToken())
         .then((response:any)=>{
-            if (response.data.role == "pembeli"){
-                result=true;
-            }
+            result=true;
         }).catch(error=>{result = false});
 
-        if (result==false){
-            this.router.navigate(['/login']);
+        if (result){
+            this.router.navigate(['/home']);
         }
-        return result;
+        return ! result;
     }
 }

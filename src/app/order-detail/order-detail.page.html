@@ -75,6 +75,11 @@
 
       <div style="font-size: 14px; color: #888;">Payment Method</div>
       <div style="font-weight: bold;">{{ selectedPaymentMethod || '-' }}</div>
+      <!-- ✅ Tambahan info rekening -->
+    <div *ngIf="paymentDetails[selectedPaymentMethod]" style="margin-top: 8px; font-size: 14px; color: #444;">
+      <ion-icon name="information-circle-outline" style="margin-right: 6px;"></ion-icon>
+      <strong>No. Rekening:</strong> {{ paymentDetails[selectedPaymentMethod] }}
+    </div>
     </div>
 
     <!-- Action Sheet untuk memilih metode -->
@@ -103,6 +108,7 @@
   <ion-button expand="block" color="success" class="ion-margin-top" (click)="submitOrder()">
     Order Now
   </ion-button>
+
 </ion-content>
 
 

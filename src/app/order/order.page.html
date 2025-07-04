@@ -11,6 +11,7 @@
   <ion-card *ngFor="let transaksi of transaksis; let i = index" (click)="toggleDetails(i)">
     <ion-card-header>
       <ion-card-subtitle>{{ transaksi.created_at | date:'short' }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ transaksi.kode_transaksi }}</ion-card-subtitle>
       <ion-card-title>
         <ion-icon [name]="getIcon(transaksi.order.jenis_order)" style="margin-right: 8px;"></ion-icon>
         {{ transaksi.order.jenis_order }}
@@ -20,11 +21,11 @@
       <p>Total: Rp{{ transaksi.total_harga | number:'1.0-0' }}</p>
       <p>Metode Pembayaran: {{ transaksi.metode_pembayaran }}</p>
       <p>Status Pembayaran: {{transaksi.status_pembayaran}} </p>
-      <p *ngIf="expandedIndex !== i" style="color: brown;">Klik untuk lihat detail</p>
+      <!-- <p *ngIf="expandedIndex !== i" style="color: brown;">Klik untuk lihat detail</p> -->
     </ion-card-content>
 
     <!-- Detail hanya jika diperluas -->
-    <ng-container *ngIf="expandedIndex === i">
+    <ng-container >
       <ion-list>
         <ion-item *ngFor="let item of transaksi.order.details">
           <ion-avatar slot="start">
@@ -42,7 +43,7 @@
           <ion-card-title>Data Reservasi</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <p>Meja: {{ transaksi.reservasi.meja.nama_meja }} </p>
+          <p>Meja: {{ transaksi.order.meja.nama_meja }} </p>
           <p>Tanggal dan Jam: {{ transaksi.reservasi.tanggal_dan_jam}} </p>
           <p>Status Reservasi: {{transaksi.reservasi.status_reservasi}} </p>
         
@@ -50,8 +51,24 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card-header>
-        <ion-card-title>Bukti Pembayaran</ion-card-title>
+      <ion-card-header >
+       <ion-card-title>Bukti Pembayaran</ion-card-title>
+       
+       <ion-card-content *ngIf="transaksi.status_pembayaran === 'belum'">
+          <form #f="ngForm" (ngSubmit)="uploadBuktiPembayaran(transaksi.id, f)">
+            <input type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange(transaksi.id, $event)">
+            <button>
+              <span *ngIf="transaksi.bukti_pembayaran == null; else editBtn">Upload</span>
+              <ng-template #editBtn>Edit</ng-template>
+            </button>
+          </form>
+        </ion-card-content> 
+
+        <ion-card-content *ngIf="transaksi.bukti_pembayaran != null" >
+          <img *ngIf="expandedIndex === i" [src]="transaksi.bukti_pembayaran" alt="Bukti Pembayaran" style="width: 100%; border-radius: 8px;" />
+          <p [hidden]="expandedIndex === i">Klik untuk melihat bukti pembayaran</p>
+        </ion-card-content>
+
       </ion-card-header>
     </ng-container>
   </ion-card>

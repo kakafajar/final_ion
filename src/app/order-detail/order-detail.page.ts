@@ -17,6 +17,8 @@ interface cartItem{
   jumlah:number
 }
 
+
+
 @Component({
   standalone: false,
   selector: 'app-order-detail',
@@ -78,19 +80,13 @@ export class OrderDetailPage implements OnInit{
     {
       text: 'Cash',
       handler: () => {
-        this.selectedPaymentMethod = 'Cash';
+        this.selectedPaymentMethod = 'tunai'
       }
     },
     {
-      text: 'Debit Card',
+      text: 'qris',
       handler: () => {
-        this.selectedPaymentMethod = 'Debit Card';
-      }
-    },
-    {
-      text: 'QRIS',
-      handler: () => {
-        this.selectedPaymentMethod = 'QRIS';
+        this.selectedPaymentMethod = 'qris'
       }
     },
     {
@@ -98,6 +94,13 @@ export class OrderDetailPage implements OnInit{
       role: 'cancel'
     }
   ];
+
+paymentDetails: Record<string, string> = {
+  qris: '0896-1234-5678 (a.n. Fajar)',
+  OVO: '0822-4567-1234 (a.n. Fajar)',
+  GOPAY: '0813-7890-4321 (a.n. Fajar)'
+};
+
 
   openPaymentOptions() {
     this.showPaymentOptions = true;
@@ -127,9 +130,14 @@ export class OrderDetailPage implements OnInit{
 
     // create OOOOOrder
     try{
+      let meja_id = null;
+      if (this.selectedMeja){
+        meja_id = this.selectedMeja.id
+      }
       let order:any;
       const orderRequest$ = this.orderService.create({
         user_id : localStorage.getItem("user_id"),
+        meja_id : meja_id,
         jenis_order: this.orderType
       });
 
@@ -168,7 +176,6 @@ export class OrderDetailPage implements OnInit{
       if (this.orderType === 'reservasi') {
         const reservasi$ = this.reservasiService.create({
           user_id : localStorage.getItem("user_id"),
-          meja_id : this.selectedMeja.id,
           transaksi_id : transaksi.id,
           tanggal_dan_jam : this.tanggalDanJam.slice(0,-1).split("T").join(" ")
         });
@@ -178,7 +185,7 @@ export class OrderDetailPage implements OnInit{
         });
       }
 
-      this.navCtrl.navigateForward('/home');
+      this.navCtrl.navigateForward('/order');
     }
     catch(error){
       alert(error);

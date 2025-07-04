@@ -22,7 +22,7 @@ import { AuthService } from '../service/auth.service';
     RouterLink  // <-- Tambahkan jika Anda menggunakan [routerLink] di template ProfilPage
   ]
 })
-export class ProfilPage implements OnInit {
+export class ProfilPage{
   user :any;
 
   constructor(
@@ -34,7 +34,7 @@ export class ProfilPage implements OnInit {
     private userService: UserService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     const RawUser :any= localStorage.getItem('user')
     this.user = JSON.parse(RawUser);
   }
